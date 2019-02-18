@@ -1,0 +1,367 @@
+.topnav {
+    background-color: #333;
+    overflow: hidden;
+    position: sticky;
+}
+
+
+a, p {
+    font-family: "Champagne";
+    text-decoration: none;
+    font-size: 24px;
+    margin-left: 1%;
+}
+
+legend{
+    font-size: 28px;
+}
+
+textarea{
+    width:98%;
+}
+
+div{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:center;
+}
+
+div.compteben>div{
+    width:32%;
+    margin:1%;
+}
+
+
+
+h2 {
+    font-family: "Champagne";
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 2%;
+    margin-top: 2%;
+}
+
+h2.EVI{
+    margin-bottom: 10%;
+}
+
+
+.imagebanniere{
+    width: 100%;
+    height: 100%;
+}
+/* Style the links inside the navigation bar */
+.topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    width:12.128%;
+    margin-left: 0%;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+    transition: 0.5s;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+}
+
+
+/* Style the navbar */
+#navbar {
+overflow: hidden;
+background-color: #333;
+position: sticky;
+}
+
+/* Navbar links */
+#navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+    margin-left: 0%;
+    width:10%;
+}
+
+#navbar a:hover{
+    background-color: #ddd;
+    color: black;
+    transition: 0.5s;
+}
+
+/*banniere*/
+.container {
+    position: relative;
+    text-align: center;
+    background-size: cover; 
+    display: block;
+    height: 468px;
+    min-width: 100%;
+}
+
+.container > a {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 60px;
+    font-family: "KeepCalm-Medium";
+    color: white;
+    text-decoration: none;
+    padding: 4%;
+    transition : 0.5s;
+
+}
+
+.container > a:hover {
+    color: white;
+    background-color: rgba(200, 200, 200, 0.5);
+}
+
+.festival {
+    color: black;
+    border: 5px solid white;
+    min-width: 300px; 
+    background: rgb(187,164,212);
+background: linear-gradient(90deg, rgba(187,164,212,1) 0%, rgba(226,198,202,1) 51%, rgba(255,197,224,1) 100%);
+    margin: 20px 20px 35px 20px;
+    transition : 0.5s;
+    border-radius: 25px;
+    padding: 25px;
+    width: 25%;
+    transition : 0.5s;
+}
+
+.festival:hover{
+background: linear-gradient(90deg, rgba(187,164,212,1) 0%, rgba(255,233,236,1) 51%, rgba(255,200,225,1) 100%);
+    border: 5px solid white;
+    transition : 0.5s;
+}
+
+.boite {
+    color: black;
+    size: 5em;
+    border: 5px solid white;
+    border-radius: 10px;
+    text-align: center;
+    background-size: cover; 
+    display: block;
+    margin: 15px;
+ background: rgb(193,166,221);
+background: linear-gradient(90deg, rgba(193,166,221,1) 0%, rgba(236,204,221,1) 41%, rgba(207,133,166,1) 100%);
+}
+
+body{
+    color: white;
+background: rgb(59,40,79);
+background: linear-gradient(90deg, rgba(59,40,79,1) 0%, rgba(218,90,106,1) 49%, rgba(78,41,58,1) 100%);
+}
+
+.item{
+    height: 50px;
+        border-radius: 5px;
+    text-align: center;
+    display: block;
+    background-size: cover; 
+    margin: 10px;
+    padding: 10px;
+    color: black;
+        background-color: rgba(255, 255, 255, .25);
+
+    transition : 0.25s;
+}
+
+.item2{
+    height: 50px;
+        border-radius: 5px;
+    text-align: center;
+    display: block;
+    background-size: cover; 
+    margin: 10px;
+    padding: 10px;
+    color: white;
+    background-color: #8AC277;
+    transition : 0.25s;
+}
+
+.item:hover {
+  background-color: rgba(255, 255, 255, .5); 
+  transition : 0.25s; 
+}
+
+.item2 > a, a:focus, a:hover, a:active{
+    color: white;
+}
+
+.item > a:focus, a{
+    color: grey;
+}
+
+.item > a:hover, a:active{
+    color: red;
+}
+
+
+
+
+input{
+    display: flex;
+    width:50%;
+    font-family: "Champagne";
+    color: brown;
+}
+
+.input{
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    margin-bottom: 5%;
+}
+
+.input>div{
+    width: 50%;
+    display: inherit;
+    margin-bottom: 1%;
+}
+
+div>input{
+    width: 50%;
+    display: flex;
+    margin-bottom: 1%;
+
+}
+
+.login{
+    display: none;
+}
+
+
+main{
+    margin-bottom: 10%;
+    
+}
+
+/*img{
+    border-radius:20px;
+    border : 1px solid #66ff66;
+    width: 150%;
+    min-width: 150px;
+
+}*/
+
+body{
+    width:100%;
+    line-height: 150%;
+    margin: auto;
+}
+
+label {
+    width: 49%;
+    margin: 1%;
+}
+
+form{
+    font-size:20px;
+    display:flex;
+    align-items:center;
+    font-family: "Champagne";
+    color: white;
+    line-height: 35px;
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-bottom: 1%;
+}
+
+fieldset{
+
+    height:115%;
+}
+
+
+@font-face{
+    font-family: "KeepCalm-Medium";
+    src: url('./font/KeepCalm-Medium.ttf');
+}
+
+@font-face{
+    font-family: "Champagne";
+    src: url("./font/Champagne.ttf");
+}
+
+@media screen and (max-width: 1555px){
+    .festival {
+        width: 33%;
+    }
+
+}
+
+@media screen and  (max-width: 928px){
+
+    .festival {
+        width: 70%;
+       
+    }
+
+    .festival:hover{
+        transition : 0.5s;
+    }
+}
+
+
+@media screen and  (max-width: 725px){
+
+    div.compteben>div{
+        width:50%;
+        margin:1%;
+    }
+
+}
+
+
+
+@media screen and  (max-width: 416px){
+
+    
+
+    
+
+    .festival{
+        padding:0px;
+        display : block;
+        flex-wrap: nowrap;
+        margin-left: -13%;
+        margin-right: -13%;
+    }
+
+    div{
+        align-items: center;
+        padding: 0%;
+        min-width: 0%;
+    }
+
+   
+}
+
