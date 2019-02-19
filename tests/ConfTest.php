@@ -1,5 +1,5 @@
 <?php
-require_once '../config/Conf.php';
+require_once '../src/config/Conf.php';
 use PHPUnit\Framework\TestCase;
 
 class ConfTest extends TestCase {
