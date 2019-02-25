@@ -1,12 +1,13 @@
 <?php
-use PHPUnit\Framework\TestSuite;
-
-require_once '../src/model/ModelBenevole.php';
+use PHPUnit\Framework\TestCase;
+include '../src/lib/File.php';
+include '../src/lib/Security.php';
+include '../src/model/ModelBenevole.php';
 
 /**
  * ModelBenevole test case.
  */
-class ModelBenevoleTest extends TestSuite{
+class ModelBenevoleTest extends TestCase{
 
     /**
      *
@@ -14,31 +15,16 @@ class ModelBenevoleTest extends TestSuite{
      */
     private $modelBenevole;
 
-    /**
-     * Prepares the environment before running a test.
-     */
-    protected function setUp() {
-        parent::setUp();
-        $this->modelBenevole = new ModelBenevole();
-    }
-
-    /**
-     * Cleans up the environment after running a test.
-     */
-    protected function tearDown() {
-        $this->modelBenevole = null;
-        parent::tearDown();
-    }
 
     /**
      * Tests ModelBenevole->__get()
      */
     public function test__get() {
         
-        //on crée les variables pour les valeurs spéciales
+        //on crï¿½e les variables pour les valeurs spï¿½ciales
         $nonce = Security::generateRandomHex();
         
-        //on crée les valeurs à donner au bénévole
+        //on crï¿½e les valeurs ï¿½ donner au bï¿½nï¿½vole
         $data = array(
             "IDBenevole" => null,
             "login" => "testMethod__get",
@@ -51,13 +37,13 @@ class ModelBenevoleTest extends TestSuite{
             "nonce" => $nonce,
             );
         
-        //on crée un bénévole
+        //on crï¿½e un bï¿½nï¿½vole
         $this->modelBenevole = new ModelBenevole($data);
         
-        //on récupère la valeur du login avec la fonction
+        //on rï¿½cupï¿½re la valeur du login avec la fonction
         $log = $this->modelBenevole->__get("login");
         
-        //on vérifie qu'il est bien égal au login donné
+        //on vï¿½rifie qu'il est bien ï¿½gal au login donnï¿½
         $this->assertEquals("testMethod__get", $log);
     }
 
@@ -66,10 +52,10 @@ class ModelBenevoleTest extends TestSuite{
      */
     public function test__set() {
         
-        //on crée les variables pour les valeurs spéciales
+        //on crï¿½e les variables pour les valeurs spï¿½ciales
         $nonce = Security::generateRandomHex();
         
-        //on crée les valeurs à donner au bénévole
+        //on crï¿½e les valeurs ï¿½ donner au bï¿½nï¿½vole
         $data = array(
             "IDBenevole" => null,
             "login" => "testMethod__set",
@@ -82,16 +68,16 @@ class ModelBenevoleTest extends TestSuite{
             "nonce" => $nonce,
         );
         
-        //on crée un bénévole
+        //on crï¿½e un bï¿½nï¿½vole
         $this->modelBenevole = new ModelBenevole($data);
         
         //on modifie la valeur du login avec la fonction
         $this->modelBenevole->__set("login", "testMethod__set2");
         
-        //on récupère la valeur du login
+        //on rï¿½cupï¿½re la valeur du login
         $log = $this->modelBenevole->__get("login");
         
-        //on vérifie que cette valeur correspond à la nouvelle valeur donnée
+        //on vï¿½rifie que cette valeur correspond ï¿½ la nouvelle valeur donnï¿½e
         $this->assertEquals("testMethod__set2", $log);
     }
 
@@ -99,18 +85,18 @@ class ModelBenevoleTest extends TestSuite{
      * Tests ModelBenevole::readAllOrga()
      */
     public function testReadAllOrga() {
-        //on récupère tous les organisateurs d'un festival avec la fonction
-        $allOrga = $this->testReadAllOrga(1);
+        //on rï¿½cupï¿½re tous les organisateurs d'un festival avec la fonction
+        $allOrga = $this->modelBenevole->readAllOrga(1);
         
-        //on récupère tous les organisateur d'un festival "à la main"
+        //on rï¿½cupï¿½re tous les organisateur d'un festival "ï¿½ la main"
         $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ONb.IDBenevole = l.IDBenevole WHERE l.IDFestival == 1 AND l.isOrganisateur = 1;");
         $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
         $rep->fetchAll();
         
-        //on vérifie que les deux tableaux de réponses ont la même taille
+        //on vï¿½rifie que les deux tableaux de rï¿½ponses ont la mï¿½me taille
         $this->assertEquals(sizeOf($rep), sifeOf($allOrga));
         
-        //on vérifie que tous les éléments des deux tableaux sont les mêmes
+        //on vï¿½rifie que tous les ï¿½lï¿½ments des deux tableaux sont les mï¿½mes
         for ($i = 0; $i < $allOrga; $i++) {
             $this->assertEquals($allOrga[$i], $rep[$i]);
         }
@@ -120,18 +106,18 @@ class ModelBenevoleTest extends TestSuite{
      * Tests ModelBenevole::readAllBene()
      */
     public function testReadAllBene() {
-        //on récupère tous les bénévoles d'un festival avec la fonction
+        //on rï¿½cupï¿½re tous les bï¿½nï¿½voles d'un festival avec la fonction
         $allBene = $this->modelBenevole->readAllBene(1);
         
-        //on récupère tous les bénévoles d'un festival "à la main"
+        //on rï¿½cupï¿½re tous les bï¿½nï¿½voles d'un festival "ï¿½ la main"
         $rep = Model::$pdo->query("SELECT * FROM Benevole b JOINlink_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.valide = 1;");
         $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
         $rep->fetchAll();
         
-        //on vérifie que les deux tableaux de réponses ont la même taille
+        //on vï¿½rifie que les deux tableaux de rï¿½ponses ont la mï¿½me taille
         $this->assertEquals(sizeOf($rep), sifeOf($allBene));
         
-        //on vérifie que tous les éléments des deux tableaux sont les mêmes
+        //on vï¿½rifie que tous les ï¿½lï¿½ments des deux tableaux sont les mï¿½mes
         for ($i = 0; $i < $allBene; $i++) {
             $this->assertEquals($allBene[$i], $rep[$i]);
         }
@@ -141,18 +127,18 @@ class ModelBenevoleTest extends TestSuite{
      * Tests ModelBenevole::readAllDemandes()
      */
     public function testReadAllDemandes() {
-        //on récupère toutes les demandes de bénévolat avec la fonction
+        //on rï¿½cupï¿½re toutes les demandes de bï¿½nï¿½volat avec la fonction
         $allDemandes = $this->modelBenevole->readAllDemandes(1);
      
-        //on récupère toutes les demandes de bénévolat "à la main"
+        //on rï¿½cupï¿½re toutes les demandes de bï¿½nï¿½volat "ï¿½ la main"
         $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.valide = 0;");
         $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
         $rep->fetchAll();
         
-        //on vérifie que les deux tableaux de réponses ont la même taille
+        //on vï¿½rifie que les deux tableaux de rï¿½ponses ont la mï¿½me taille
         $this->assertEquals(sizeOf($rep), sifeOf($allDemandes));
         
-        //on vérifie que tous les éléments des deux tableaux sont les mêmes
+        //on vï¿½rifie que tous les ï¿½lï¿½ments des deux tableaux sont les mï¿½mes
         for ($i = 0; $i < $allDemandes; $i++) {
             $this->assertEquals($allDemandes[$i], $rep[$i]);
         }
@@ -162,10 +148,10 @@ class ModelBenevoleTest extends TestSuite{
      * Tests ModelBenevole::isPref()
      */
     public function testIsPref() {
-        //on récupère la valeur d'une préférence d'un bénévole pour un poste avec la fonction
+        //on rï¿½cupï¿½re la valeur d'une prï¿½fï¿½rence d'un bï¿½nï¿½vole pour un poste avec la fonction
         $pref = $this->modelBenevole->isPref(1, 46);
         
-        //on récupère la valeur d'une préférence d'un bénévole pour un poste "à la main"
+        //on rï¿½cupï¿½re la valeur d'une prï¿½fï¿½rence d'un bï¿½nï¿½vole pour un poste "ï¿½ la main"
         $rep = Model::$pdo->query("SELECT * FROM link_PreferenceBenevolePostes WHERE IDFestival = 1 AND IDPoste = 46;");
         $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
         $rep->fetchAll();
@@ -175,7 +161,7 @@ class ModelBenevoleTest extends TestSuite{
             $test = 1;
         }
         
-        //on vérifie que les deux valeurs soient les mêmes
+        //on vï¿½rifie que les deux valeurs soient les mï¿½mes
         $this->assertEquals($pref, $test);
     }
 
@@ -183,18 +169,18 @@ class ModelBenevoleTest extends TestSuite{
      * Tests ModelBenevole::readAllDemandesOrga()
      */
     public function testReadAllDemandesOrga() {
-        //on récupère toutes les demandes d'organisation de bénévoles avec la fonction
+        //on rï¿½cupï¿½re toutes les demandes d'organisation de bï¿½nï¿½voles avec la fonction
         $allDemandesOrga = $this->modelBenevole->readAllDemandesOrga(1);
         
-        //on récupère toutes les demandes d'organisation de bénévoles "à la main"
+        //on rï¿½cupï¿½re toutes les demandes d'organisation de bï¿½nï¿½voles "ï¿½ la main"
         $rep = Model::$pdo->query("SELET * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.candidat = 1;");
         $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
         $rep->fetchAll();
         
-        //on vérifie que les deux tableaux de réponses ont la même taille
+        //on vï¿½rifie que les deux tableaux de rï¿½ponses ont la mï¿½me taille
         $this->assertEquals(sizeOf($rep), sifeOf($allDemandesOrga));
         
-        //on vérifie que tous les éléments des deux tableaux sont les mêmes
+        //on vï¿½rifie que tous les ï¿½lï¿½ments des deux tableaux sont les mï¿½mes
         for ($i = 0; $i < $allDemandesOrga; $i++) {
             $this->assertEquals($allDemandesOrga[$i], $rep[$i]);
         }
@@ -204,26 +190,26 @@ class ModelBenevoleTest extends TestSuite{
      * Tests ModelBenevole::checkPassword()
      */
     public function testCheckPassword() {
-        //on vérifie si un mot de passe est correct avec la fonction
+        //on vï¿½rifie si un mot de passe est correct avec la fonction
         $test = $this->modelBenevole->checkPassword("testMethodCheckPassword", "testMethodCheckPassword");
         
-        //on vérifie que le mot de passe n'est pas correct
+        //on vï¿½rifie que le mot de passe n'est pas correct
         $this->assertFalse($test);
         
-        //on crée des variables pour les données "spéciales"
+        //on crï¿½e des variables pour les donnï¿½es "spï¿½ciales"
         $nonce = Security::generateRandomHex();
         $id = null;
         
-        //on ajoute un bénévole à la base de données
+        //on ajoute un bï¿½nï¿½vole ï¿½ la base de donnï¿½es
         Model::$pdo->query("INSERT INTO Benevole(IDBenevole, login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES (". $id .", testMethodCheckPassword, testMethodCheckPassword, testMethodCheckPassword, testMethodCheckPassword, testMethodCheckPassword, testMethodCheckPassword, testMethodCheckPassword, " . $nonce . ");");
         
-        //on vérifie si un mot de passe est correct avec la fonction
+        //on vï¿½rifie si un mot de passe est correct avec la fonction
         $test2 = $this->modelBenevole->checkPassword("testMethodCheckPassword", "testMethodCheckPassword");
         
-        //on supprime le bénévole créé pour le test
+        //on supprime le bï¿½nï¿½vole crï¿½ï¿½ pour le test
         Model::$pdo->query("DELETE FROM Benevole WHERE login = testMethodSelect;");
         
-        //on vérifie que le mot de passe est correct
+        //on vï¿½rifie que le mot de passe est correct
         $this->assertTrue($test2);
     }
 
@@ -414,4 +400,3 @@ class ModelBenevoleTest extends TestSuite{
         ModelBenevole::readPostesPref(/* parameters */);
     }
 }
-

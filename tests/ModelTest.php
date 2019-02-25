@@ -1,12 +1,15 @@
 <?php
-use PHPUnit\Framework\TestSuite;
+use PHPUnit\Framework\TestCase;
+include '../src/lib/Security.php';
+include '../src/lib/File.php';
+include '../src/model/Model.php';
+include '../src/model/ModelBenevole.php';
 
-require_once '../src/model/Model.php';
 
 /**
  * Model test case.
  */
-class ModelTest extends TestSuite {
+class ModelTest extends TestCase {
     
     private $model;
 
@@ -22,60 +25,54 @@ class ModelTest extends TestSuite {
     }
 
     /**
-     * Tests Model::init()
-     */
-    public function testInit() {
-
-    }
-
-    /**
      * Tests Model::select()
      */
     public function testSelect() {
-        //on crée des variables pour les données "spéciales"
+        //on crï¿½e des variables pour les donnï¿½es "spï¿½ciales"
         $nonce = Security::generateRandomHex();
         $id = null;
-        
-        //on insère les données que l'on va sélectionner
+
+        //on insï¿½re les donnï¿½es que l'on va sï¿½lectionner
         Model::$pdo->query("INSERT INTO Benevole(IDBenevole, login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES (". $id .", testMethodSelect, testMethodSelect, testMethodSelect, testMethodSelect, testMethodSelect, testMethodSelect, testMethodSelect, " . $nonce . ");");
         
-        //on sélectionne l'id correspondant aux données que l'on va sélectionner
+        //on sï¿½lectionne l'id correspondant aux donnï¿½es que l'on va sï¿½lectionner
         $rep = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = testMethodSelect;");
         $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
         $rep->fetchAll();
         
-        //on sélectionne les données insérées avec la fonction
+        //on sï¿½lectionne les donnï¿½es insï¿½rï¿½es avec la fonction
         $test = $this->model->select($rep);
         
-        //on vérifie que les données existent dans la base de données
+        //on vï¿½rifie que les donnï¿½es existent dans la base de donnï¿½es
         $this->assertNotEmpty($rep);
         
-        //on sélectionne "à la main" les données insérées
+        //on sï¿½lectionne "ï¿½ la main" les donnï¿½es insï¿½rï¿½es
         $rep2 = Model::$pdo->query("SELECT * FROM Benevole WHERE login = testMethodSelect;");
         $rep2->setFetchMode(PDO::FETCH_CLASS, Benevole);
         $rep2->fetchAll();
         
-        //on supprime le bénévole créé pour le test
+        //on supprime le bï¿½nï¿½vole crï¿½ï¿½ pour le test
         Model::$pdo->query("DELETE FROM Benevole WHERE login = testMethodSelect;");
         
         
-        //on vérifie que les valeurs des données sélectionnées sont les mêmes
+        //on vï¿½rifie que les valeurs des donnï¿½es sï¿½lectionnï¿½es sont les mï¿½mes
         $this->assertEquals($rep2, $test);
     }
 
     public function testSelectAll() {
-        //on sélectionne tous les bénévoles avec la fonction
-        $tab = $this->model->selectAll();
+        //on sï¿½lectionne tous les bï¿½nï¿½voles avec la fonction
+        $bene = new ModelBenevole();
+        $tab = $this->bene->selectAll();
         
-        //on sélectionne tous les bénévoles "à la main"
+        //on sï¿½lectionne tous les bï¿½nï¿½voles "ï¿½ la main"
         $rep = Model::$pdo->query("SELECT * FROM Benevole");
         $rep->setFetchMode(PDO::FETCH_CLASS, ModelBenevole);
         $rep->fetchAll();
         
-        //on vérifie que les tailles des deux tableaux retournés sont égales
+        //on vï¿½rifie que les tailles des deux tableaux retournï¿½s sont ï¿½gales
         $this->assertEquals(sizeof($tab), siezof($rep));
         
-        //pour chaque élément, on vérifie qu'ils soient les mêmes
+        //pour chaque ï¿½lï¿½ment, on vï¿½rifie qu'ils soient les mï¿½mes
         for ($i = 0; $i < sizeOf($tab); $i++) {
             $this->assertEquals($rep[$i], $tab[$i]);
         }
@@ -85,7 +82,7 @@ class ModelTest extends TestSuite {
      * Tests Model::save()
      */
     public function testSave() {
-        //on crée un tableau de données
+        //on crï¿½e un tableau de donnï¿½es
         $values = array (
             "IDBenevole" => null,
             "login" => testMethodSave,
@@ -98,21 +95,21 @@ class ModelTest extends TestSuite {
             "nonce" => Security::generateRandomHex()
         );
         
-        //on enregistre les données avec la fonction
+        //on enregistre les donnï¿½es avec la fonction
         $this->model->save($values);
         
-        //on sélectionne l'élément correspondant aux données spécifiées
+        //on sï¿½lectionne l'ï¿½lï¿½ment correspondant aux donnï¿½es spï¿½cifiï¿½es
         $rep = Model::$pdo->query("SELECT login FROM Benevole WHERE login = 'testMethodSave';");
         $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
         $rep->fetchAll();
         
-        //on supprime le bénévole créé pour le test
+        //on supprime le bï¿½nï¿½vole crï¿½ï¿½ pour le test
         Model::$pdo->query("DELETE FROM Benevole WHERE login = testMethodSave;");
         
-        //on vérifie que l'élément a bien été enregistré
+        //on vï¿½rifie que l'ï¿½lï¿½ment a bien ï¿½tï¿½ enregistrï¿½
         $this->assertNotEmpty($rep);
         
-        //on vérifie que l'élément existe dans la base de données
+        //on vï¿½rifie que l'ï¿½lï¿½ment existe dans la base de donnï¿½es
         $this->assertEquals($rep, "testMethodSave");
     }
 
@@ -120,31 +117,31 @@ class ModelTest extends TestSuite {
      * Tests Model::delete()
      */
     public function testDelete() {
-        //on crée des variables pour les données "spéciales"
+        //on crï¿½e des variables pour les donnï¿½es "spï¿½ciales"
         $nonce = Security::generateRandomHex();
         $id = null;
         
-        //on insère les données que l'on va supprimer
+        //on insï¿½re les donnï¿½es que l'on va supprimer
         Model::$pdo->query("INSERT INTO Benevole(IDBenevole, login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES (". $id .", testMethodDelete, testMethodDelete, testMethodDelete, testMethodDelete, testMethodDelete, testMethodDelete, testMethodDelete, " . $nonce . ");");
         
-        //on sélectionne l'id correspondant aux données que l'on va supprimer
+        //on sï¿½lectionne l'id correspondant aux donnï¿½es que l'on va supprimer
         $rep = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = testMethodDelete;");
         $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
         $rep->fetchAll();
         
-        //on supprime les données insérées
+        //on supprime les donnï¿½es insï¿½rï¿½es
         $this->model->delete($rep);
         
-        //on sélectionne les données que l'on a supprimé
+        //on sï¿½lectionne les donnï¿½es que l'on a supprimï¿½
         $rep2 = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = testMethodDelete;");
         $rep2->setFetchMode(PDO::FETCH_CLASS, Benevole);
         $rep2->fetchAll();
 
-        //on supprime le bénévole créé pour le test (si celui-ci n'a pas été supprimé par la fonction)
+        //on supprime le bï¿½nï¿½vole crï¿½ï¿½ pour le test (si celui-ci n'a pas ï¿½tï¿½ supprimï¿½ par la fonction)
         Model::$pdo->query("DELETE FROM Benevole WHERE login = testMethodDelete;");
         
         
-        //on vérifie que les données ne sont plus dans la base de données
+        //on vï¿½rifie que les donnï¿½es ne sont plus dans la base de donnï¿½es
         $this->assertEmpty($rep2);
     }
 
@@ -152,19 +149,19 @@ class ModelTest extends TestSuite {
      * Tests Model::update()
      */
     public function testUpdate() {
-        //on crée des variables pour les données "spéciales"
+        //on crï¿½e des variables pour les donnï¿½es "spï¿½ciales"
         $nonce = Security::generateRandomHex();
         $id = null;
         
-        //on insère les données que l'on va modifier
-        Model::$pdo->query("INSERT INTO Benevole(IDBenevole, login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES (". $id .", testMethodUpdate, testMethodUpdate, testMethodUpdate, testMethodUpdate, testMethodUpdate, testMethodUpdate, testMethodUpdate, " . $nonce . ");");
+        //on insï¿½re les donnï¿½es que l'on va modifier
+        Model::$pdo->query("INSERT INTO Benevole(IDBenevole, login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES (". $id .", testMethodUpdate, testMethodUpdate, testMethodUpdate, testMethodUpdate, 03/02/2019, testMethodUpdate, testMethodUpdate, $nonce );");
         
-        //on sélectionne l'id correspondant aux données que l'on va modifier
+        //on sï¿½lectionne l'id correspondant aux donnï¿½es que l'on va modifier
         $rep = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = testMethodDelete;");
         $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
         $rep->fetchAll();
         
-        //on crée un tableau de nouvelles valeurs 
+        //on crï¿½e un tableau de nouvelles valeurs 
         $values = array (
             "IDBenevole" => null,
             "login" => testMethodUpdateToDate,
@@ -177,29 +174,29 @@ class ModelTest extends TestSuite {
             "nonce" => Security::generateRandomHex()
         );
         
-        //on met à jour les données avec la méthode
+        //on met ï¿½ jour les donnï¿½es avec la mï¿½thode
         $this->model->update($rep, $values);
         
-        //on sélectionne les données ayant les anciennes valeurs
+        //on sï¿½lectionne les donnï¿½es ayant les anciennes valeurs
         $rep2 = Model::$pdo->query("SELECT login FROM Benevole WHERE login = testMethodUpdate;");
         $rep2->setFetchMode(PDO::FETCH_CLASS, Benevole);
         $rep2->fetchAll();
         
-        //on vérifie que les données avec les anciennes valeurs n'existent plus dans la base de données
+        //on vï¿½rifie que les donnï¿½es avec les anciennes valeurs n'existent plus dans la base de donnï¿½es
         $this->assertEmpty($rep2);
         
-        //on sélectionne les données ayant les nouvelles valeurs
+        //on sï¿½lectionne les donnï¿½es ayant les nouvelles valeurs
         $rep = Model::$pdo->query("SELECT login FROM Benevole WHERE login = testMethodUpdateToDate;");
         $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
         $rep->fetchAll();
         
-        //on supprime le bénévole créé pour le test
+        //on supprime le bï¿½nï¿½vole crï¿½ï¿½ pour le test
         Model::$pdo->query("DELETE FROM Benevole WHERE login = testMethodUpdate;");
         Model::$pdo->query("DELETE FROM Benevole WHERE login = testMethodUpdateToDate;");
         
         
         
-        //on vérifie que les données avec les nouvelles valeurs existent dans la base de données 
+        //on vï¿½rifie que les donnï¿½es avec les nouvelles valeurs existent dans la base de donnï¿½es 
         $this->assertEquals($rep, "testMethodUpdateToDate");
     }
 }
