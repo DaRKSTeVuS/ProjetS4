@@ -1,10 +1,11 @@
 <?php
+
 use PHPUnit\Framework\TestCase;
+
 include '../src/lib/Security.php';
 include '../src/lib/File.php';
 include '../src/model/Model.php';
 include '../src/model/ModelBenevole.php';
-
 
 /**
  * Model test case.
@@ -13,7 +14,7 @@ class ModelTest extends TestCase {
     
     private $model;
 
-    
+    /*
     protected function setUp() {
         parent::setUp();
         $this->model = new Model();
@@ -22,7 +23,7 @@ class ModelTest extends TestCase {
     protected function tearDown() {
         $this->model = null;
         parent::tearDown();
-    }
+    }*/
 
     /**
      * Tests Model::select()
@@ -30,29 +31,29 @@ class ModelTest extends TestCase {
     public function testSelect() {
         //on cr�e des variables pour les donn�es "sp�ciales"
         $nonce = Security::generateRandomHex();
-        $id = null;
 
         //on ins�re les donn�es que l'on va s�lectionner
-        Model::$pdo->query("INSERT INTO Benevole(IDBenevole, login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES (". $id .", testMethodSelect, testMethodSelect, testMethodSelect, testMethodSelect, testMethodSelect, testMethodSelect, testMethodSelect, " . $nonce . ");");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodSelect', 'testMethodSelect', 'testMethodSelect', 'testMethodSelect', '05/05/1999', 'testMethodSelect', 'testMethodSelect', '" . $nonce . "');");
         
         //on s�lectionne l'id correspondant aux donn�es que l'on va s�lectionner
-        $rep = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = testMethodSelect;");
-        $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
+        $rep = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodSelect';");
+        $rep->setFetchMode(PDO::FETCH_CLASS, "Benevole");
         $rep->fetchAll();
         
         //on s�lectionne les donn�es ins�r�es avec la fonction
-        $test = $this->model->select($rep);
+        $bene = new ModelBenevole();
+        $test = $this->bene->select($rep);
         
         //on v�rifie que les donn�es existent dans la base de donn�es
         $this->assertNotEmpty($rep);
         
         //on s�lectionne "� la main" les donn�es ins�r�es
-        $rep2 = Model::$pdo->query("SELECT * FROM Benevole WHERE login = testMethodSelect;");
-        $rep2->setFetchMode(PDO::FETCH_CLASS, Benevole);
+        $rep2 = Model::$pdo->query("SELECT * FROM Benevole WHERE login = 'testMethodSelect';");
+        $rep2->setFetchMode(PDO::FETCH_CLASS, "Benevole");
         $rep2->fetchAll();
         
         //on supprime le b�n�vole cr�� pour le test
-        Model::$pdo->query("DELETE FROM Benevole WHERE login = testMethodSelect;");
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodSelect';");
         
         
         //on v�rifie que les valeurs des donn�es s�lectionn�es sont les m�mes
@@ -85,19 +86,20 @@ class ModelTest extends TestCase {
         //on cr�e un tableau de donn�es
         $values = array (
             "IDBenevole" => null,
-            "login" => testMethodSave,
-            "password" => testMethodSave,
-            "nom" => testMethodSave,
-            "prenom" => testMethodSave,
-            "dateNaiss" => testMethodSave,
-            "email" => testMethodSave,
-            "numTelephone" => testMethodSave,
+            "login" => "testMethodSave",
+            "password" => "testMethodSave",
+            "nom" => "testMethodSave",
+            "prenom" => "testMethodSave",
+            "dateNaiss" => "testMethodSave",
+            "email" => "testMethodSave",
+            "numTelephone" => "testMethodSave",
             "nonce" => Security::generateRandomHex()
         );
         
         //on enregistre les donn�es avec la fonction
-        $this->model->save($values);
-        
+        $bene = new ModelBenevole();
+        $this->bene->save($values);
+                
         //on s�lectionne l'�l�ment correspondant aux donn�es sp�cifi�es
         $rep = Model::$pdo->query("SELECT login FROM Benevole WHERE login = 'testMethodSave';");
         $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
@@ -119,26 +121,26 @@ class ModelTest extends TestCase {
     public function testDelete() {
         //on cr�e des variables pour les donn�es "sp�ciales"
         $nonce = Security::generateRandomHex();
-        $id = null;
         
         //on ins�re les donn�es que l'on va supprimer
-        Model::$pdo->query("INSERT INTO Benevole(IDBenevole, login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES (". $id .", testMethodDelete, testMethodDelete, testMethodDelete, testMethodDelete, testMethodDelete, testMethodDelete, testMethodDelete, " . $nonce . ");");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodDelete', 'testMethodDelete', 'testMethodDelete', 'testMethodDelete', '01/06/1999', 'testMethodDelete', 'testMethodDelete', '" . $nonce . "');");
         
         //on s�lectionne l'id correspondant aux donn�es que l'on va supprimer
-        $rep = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = testMethodDelete;");
-        $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
+        $rep = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodDelete';");
+        $rep->setFetchMode(PDO::FETCH_CLASS, "Benevole");
         $rep->fetchAll();
         
         //on supprime les donn�es ins�r�es
-        $this->model->delete($rep);
+        $bene = new ModelBenevole();
+        $this->bene->delete($rep);
         
         //on s�lectionne les donn�es que l'on a supprim�
-        $rep2 = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = testMethodDelete;");
-        $rep2->setFetchMode(PDO::FETCH_CLASS, Benevole);
+        $rep2 = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodDelete';");
+        $rep2->setFetchMode(PDO::FETCH_CLASS, "Benevole");
         $rep2->fetchAll();
 
         //on supprime le b�n�vole cr�� pour le test (si celui-ci n'a pas �t� supprim� par la fonction)
-        Model::$pdo->query("DELETE FROM Benevole WHERE login = testMethodDelete;");
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodDelete';");
         
         
         //on v�rifie que les donn�es ne sont plus dans la base de donn�es
@@ -151,48 +153,47 @@ class ModelTest extends TestCase {
     public function testUpdate() {
         //on cr�e des variables pour les donn�es "sp�ciales"
         $nonce = Security::generateRandomHex();
-        $id = null;
         
         //on ins�re les donn�es que l'on va modifier
-        Model::$pdo->query("INSERT INTO Benevole(IDBenevole, login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES (". $id .", testMethodUpdate, testMethodUpdate, testMethodUpdate, testMethodUpdate, 03/02/2019, testMethodUpdate, testMethodUpdate, $nonce );");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodUpdate', 'testMethodUpdate', 'testMethodUpdate', 'testMethodUpdate', '03/02/2019', 'testMethodUpdate', 'testMethodUpdate', '". $nonce ."');");
         
         //on s�lectionne l'id correspondant aux donn�es que l'on va modifier
-        $rep = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = testMethodDelete;");
-        $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
+        $rep = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodUpdate';");
+        $rep->setFetchMode(PDO::FETCH_CLASS, "Benevole");
         $rep->fetchAll();
         
         //on cr�e un tableau de nouvelles valeurs 
         $values = array (
             "IDBenevole" => null,
-            "login" => testMethodUpdateToDate,
-            "password" => testMethodUpdateToDate,
-            "nom" => testMethodUpdateToDate,
-            "prenom" => testMethodUpdateToDate,
-            "dateNaiss" => testMethodUpdateToDate,
-            "email" => testMethodUpdateToDate,
-            "numTelephone" => testMethodUpdateToDate,
+            "login" => "testMethodUpdateToDate",
+            "password" => "testMethodUpdateToDate",
+            "nom" => "testMethodUpdateToDate",
+            "prenom" => "testMethodUpdateToDate",
+            "dateNaiss" => "testMethodUpdateToDate",
+            "email" => "testMethodUpdateToDate",
+            "numTelephone" => "testMethodUpdateToDate",
             "nonce" => Security::generateRandomHex()
         );
         
         //on met � jour les donn�es avec la m�thode
-        $this->model->update($rep, $values);
+        $bene = new ModelBenevole();
+        $this->bene->update($rep, $values);
         
         //on s�lectionne les donn�es ayant les anciennes valeurs
-        $rep2 = Model::$pdo->query("SELECT login FROM Benevole WHERE login = testMethodUpdate;");
-        $rep2->setFetchMode(PDO::FETCH_CLASS, Benevole);
+        $rep2 = Model::$pdo->query("SELECT login FROM Benevole WHERE login = 'testMethodUpdate';");
+        $rep2->setFetchMode(PDO::FETCH_CLASS, "Benevole");
         $rep2->fetchAll();
         
         //on v�rifie que les donn�es avec les anciennes valeurs n'existent plus dans la base de donn�es
         $this->assertEmpty($rep2);
         
         //on s�lectionne les donn�es ayant les nouvelles valeurs
-        $rep = Model::$pdo->query("SELECT login FROM Benevole WHERE login = testMethodUpdateToDate;");
-        $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
+        $rep = Model::$pdo->query("SELECT login FROM Benevole WHERE login = 'testMethodUpdateToDate';");
+        $rep->setFetchMode(PDO::FETCH_CLASS, "Benevole");
         $rep->fetchAll();
         
         //on supprime le b�n�vole cr�� pour le test
-        Model::$pdo->query("DELETE FROM Benevole WHERE login = testMethodUpdate;");
-        Model::$pdo->query("DELETE FROM Benevole WHERE login = testMethodUpdateToDate;");
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodUpdateToDate';");
         
         
         
