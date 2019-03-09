@@ -28,7 +28,7 @@ class ModelCreneauxTest extends TestCase{
         //on recupere la valeur du nombre de benevoles
         $nb = $this->modelBenevole->__get("nbBenevoles");
         
-        //on verifie qu'ele est bien egale a cette donnee
+        //on verifie qu'ele est bien egale a celle donnee
         $this->assertEquals(8, $nb);
     }
 
@@ -51,7 +51,7 @@ class ModelCreneauxTest extends TestCase{
         //on modifie la valeur du nombre de benevoles avec la fonction
         $this->modelBenevole->__set("nbBenevoles", 9);
         
-        //on recupere la valeur du nombre e benevoles
+        //on recupere la valeur du nombre de benevoles
         $nb = $this->modelBenevole->__get("nbBenevoles");
         
         //on verifie qu'elle est bien egale a la nouvelle valeur
@@ -66,9 +66,9 @@ class ModelCreneauxTest extends TestCase{
         $cren = new ModelCreneaux();
         $allCren = $this->cren->selectAllCren(74, 22);
         
-        //on selectionne tous les creeaux "a la main"
+        //on selectionne tous les creneaux "a la main"
         $rep = Model::$pdo->query("SELECT * FROM Creneaux c JOIN link_PostesParFestival l ON c.IDPoste = l.IDPostee WHERE c.IDPoste = 74 AND l.IDFestival = 22;");
-        $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
+        $rep->setFetchMode(PDO::FETCH_CLASS, Creneaux);
         $rep->fetchAll();
         
         $this->assertEquals(sizeOf($rep), sifeOf($allCren));
