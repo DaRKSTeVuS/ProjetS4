@@ -86,7 +86,8 @@ class ModelBenevoleTest extends TestCase{
      */
     public function testReadAllOrga() {
         //on r�cup�re tous les organisateurs d'un festival avec la fonction
-        $allOrga = $this->modelBenevole->readAllOrga(1);
+        $bene = new ModelBenevole();
+        $allOrga = $this->bene->readAllOrga(1);
         
         //on r�cup�re tous les organisateur d'un festival "� la main"
         $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ONb.IDBenevole = l.IDBenevole WHERE l.IDFestival == 1 AND l.isOrganisateur = 1;");
@@ -107,7 +108,8 @@ class ModelBenevoleTest extends TestCase{
      */
     public function testReadAllBene() {
         //on r�cup�re tous les b�n�voles d'un festival avec la fonction
-        $allBene = $this->modelBenevole->readAllBene(1);
+        $bene = new ModelBenevole();
+        $allBene = $this->bene->readAllBene(1);
         
         //on r�cup�re tous les b�n�voles d'un festival "� la main"
         $rep = Model::$pdo->query("SELECT * FROM Benevole b JOINlink_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.valide = 1;");
@@ -128,7 +130,8 @@ class ModelBenevoleTest extends TestCase{
      */
     public function testReadAllDemandes() {
         //on r�cup�re toutes les demandes de b�n�volat avec la fonction
-        $allDemandes = $this->modelBenevole->readAllDemandes(1);
+        $bene = new ModelBenevole();
+        $allDemandes = $this->bene->readAllDemandes(1);
      
         //on r�cup�re toutes les demandes de b�n�volat "� la main"
         $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.valide = 0;");
@@ -149,7 +152,8 @@ class ModelBenevoleTest extends TestCase{
      */
     public function testIsPref() {
         //on r�cup�re la valeur d'une pr�f�rence d'un b�n�vole pour un poste avec la fonction
-        $pref = $this->modelBenevole->isPref(1, 46);
+        $bene = new ModelBenevole();
+        $pref = $this->bene->isPref(1, 46);
         
         //on r�cup�re la valeur d'une pr�f�rence d'un b�n�vole pour un poste "� la main"
         $rep = Model::$pdo->query("SELECT * FROM link_PreferenceBenevolePostes WHERE IDFestival = 1 AND IDPoste = 46;");
@@ -170,7 +174,8 @@ class ModelBenevoleTest extends TestCase{
      */
     public function testReadAllDemandesOrga() {
         //on r�cup�re toutes les demandes d'organisation de b�n�voles avec la fonction
-        $allDemandesOrga = $this->modelBenevole->readAllDemandesOrga(1);
+        $bene = new ModelBenevole();
+        $allDemandesOrga = $this->bene->readAllDemandesOrga(1);
         
         //on r�cup�re toutes les demandes d'organisation de b�n�voles "� la main"
         $rep = Model::$pdo->query("SELET * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.candidat = 1;");
@@ -191,7 +196,8 @@ class ModelBenevoleTest extends TestCase{
      */
     public function testCheckPassword() {
         //on v�rifie si un mot de passe est correct avec la fonction
-        $test = $this->modelBenevole->checkPassword("testMethodCheckPassword", "testMethodCheckPassword");
+        $bene = new ModelBenevole();
+        $test = $this->bene->checkPassword("testMethodCheckPassword", "testMethodCheckPassword");
         
         //on v�rifie que le mot de passe n'est pas correct
         $this->assertFalse($test);
@@ -201,13 +207,13 @@ class ModelBenevoleTest extends TestCase{
         $id = null;
         
         //on ajoute un b�n�vole � la base de donn�es
-        Model::$pdo->query("INSERT INTO Benevole(IDBenevole, login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES (". $id .", testMethodCheckPassword, testMethodCheckPassword, testMethodCheckPassword, testMethodCheckPassword, testMethodCheckPassword, testMethodCheckPassword, testMethodCheckPassword, " . $nonce . ");");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodCheckPassword', 'testMethodCheckPassword', 'testMethodCheckPassword', 'testMethodCheckPassword', '01/06/1999', 'testMethodCheckPassword', 'testMethodCheckPassword', '" . $nonce . "');");
         
         //on v�rifie si un mot de passe est correct avec la fonction
-        $test2 = $this->modelBenevole->checkPassword("testMethodCheckPassword", "testMethodCheckPassword");
+        $test2 = $this->bene->checkPassword("testMethodCheckPassword", "testMethodCheckPassword");
         
         //on supprime le b�n�vole cr�� pour le test
-        Model::$pdo->query("DELETE FROM Benevole WHERE login = testMethodSelect;");
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodSelect';");
         
         //on v�rifie que le mot de passe est correct
         $this->assertTrue($test2);
@@ -216,23 +222,71 @@ class ModelBenevoleTest extends TestCase{
     /**
      * Tests ModelBenevole::accept()
      */
-    public function testAccept()
-    {
-        // TODO Auto-generated ModelBenevoleTest::testAccept()
-        $this->markTestIncomplete("accept test not implemented");
-
-        ModelBenevole::accept(/* parameters */);
+    public function testAccept() {
+        //on cree des variables pour les donnees "speciales"
+        $nonce = Security::generateRandomHex();
+        
+        //on ajoute un benevole
+        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodAccept', 'testMethodAccept', 'testMethodAccept', 'testMethodAccept', '01/06/1999', 'testMethodAccept', 'testMethodAccept', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodAccept', 'testMethodAccept', '01/06/1999', '02/06/1999', 'testMethodAccept')");
+        
+        //on recupere les id des deux objets crees
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodAccept'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodAccept'");
+        
+        //on fait participer le benevole au festival
+        Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
+        
+        //on verifie que l'attribut "valide" est bien a "false"
+        $valide = Model::$pdo->query("SELECT valide FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
+        $this->assertFalse($valide);
+        
+        //on rend la participation valide avec la fonction
+        $bene = new ModelBenevole();
+        $this->bene->accept($idBene, $idFest);
+        
+        //on verifie que l'attribut "valide" est bien passe a "true"
+        $valide = Model::$pdo->query("SELECT valide FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
+        $this->assertTrue($valide);
+        
+        //on supprime les ojbets crees
+        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodAccept'");
+        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodAccept'");
     }
 
     /**
      * Tests ModelBenevole::promote()
      */
-    public function testPromote()
-    {
-        // TODO Auto-generated ModelBenevoleTest::testPromote()
-        $this->markTestIncomplete("promote test not implemented");
-
-        ModelBenevole::promote(/* parameters */);
+    public function testPromote() {
+        //on cree des variables pour les donnees "speciales"
+        $nonce = Security::generateRandomHex();
+        
+        //on ajoute un benevole
+        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodPromote', 'testMethodPromote', 'testMethodPromote', 'testMethodPromote', '01/06/1999', 'testMethodPromote', 'testMethodPromote', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodPromote', 'testMethodPromote', '01/06/1999', '02/06/1999', 'testMethodPromote')");
+        
+        //on recupere les id des deux objets crees
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodPromote'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodPromote'");
+       
+        //on fait participer le benevole au festival
+        Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
+        
+        //on verifie que l'attribut "isOrganisateur" est bien a "false"
+        $isOrga = Model::$pdo->query("SELECT isOrganisateur FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
+        $this->assertFalse($isOrga);
+        
+        //on donne le rang d'organisateur au benevole avec la fonction
+        $bene = new ModelBenevole();
+        $this->bene->promote($idBene, $idFest);
+        
+        //on verifie que l'attribut "isOrganisateur" est bien passe a "true"
+        $isOrga = Model::$pdo->query("SELECT isOrganisateur FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
+        $this->assertTrue($isOrga);
+        
+        //on supprime les ojbets crees
+        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodPromote'");
+        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodPromote'");
     }
 
     /**
@@ -240,98 +294,270 @@ class ModelBenevoleTest extends TestCase{
      */
     public function testDemote()
     {
-        // TODO Auto-generated ModelBenevoleTest::testDemote()
-        $this->markTestIncomplete("demote test not implemented");
-
-        ModelBenevole::demote(/* parameters */);
+        //on cree des variables pour les donnees "speciales"
+        $nonce = Security::generateRandomHex();
+        
+        //on ajoute un benevole
+        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodDemote', 'testMethodDemote', 'testMethodDemote', 'testMethodDemote', '01/06/1999', 'testMethodDemote', 'testMethodDemote', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodDemote', 'testMethodDemote', '01/06/1999', '02/06/1999', 'testMethodDemote')");
+        
+        //on recupere les id des deux objets crees
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodDemote'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodDemote'");
+       
+        //on fait participer le benevole au festival
+        Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
+        
+        //on donne le rang d'organisateur au benevole avec la fonction
+        $bene = new ModelBenevole();
+        $this->bene->promote($idBene, $idFest);
+        
+        //on verifie que l'attribut "isOrganisateur" est bien a "true"
+        $isOrga = Model::$pdo->query("SELECT isOrganisateur FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
+        $this->assertTrue($isOrga);
+        
+        //on enleve le rang d'organisateur au benevole avec la fonction
+        $this->bene->demote();
+        
+        //on verifie que l'attribut "isOrganisateur" est bien passe a "false"
+        $isOrga = Model::$pdo->query("SELECT isOrganisateur FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
+        $this->assertFalse($isOrga);
+        
+        //on supprime les ojbets crees
+        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodDemote'");
+        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodDemote'");
+        
     }
 
     /**
      * Tests ModelBenevole::reject()
      */
-    public function testReject()
-    {
-        // TODO Auto-generated ModelBenevoleTest::testReject()
-        $this->markTestIncomplete("reject test not implemented");
-
-        ModelBenevole::reject(/* parameters */);
+    public function testReject() {
+        //on cree des variables pour les donnees "speciales"
+        $nonce = Security::generateRandomHex();
+        
+        //on ajoute un benevole
+        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodReject', 'testMethodReject', 'testMethodReject', 'testMethodReject', '01/06/1999', 'testMethodReject', 'testMethodReject', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodReject', 'testMethodReject', '01/06/1999', '02/06/1999', 'testMethodReject')");
+        
+        //on recupere les id des deux objets crees
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodReject'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodReject'");
+        
+        //on fait participer le benevole au festival
+        Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
+        
+        //on rejette le benevole avec la fonction
+        $bene = new ModelBenevole();
+        $this->bene->reject($idBene, $idFest);
+        
+        //on verifie que l'attribut "candidat" est bien passe a "false"
+        $iscandidat = Model::$pdo->query("SELECT candidat FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
+        $this->assertFalse($iscandidat);
+        
+        //on supprime les ojbets crees
+        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodPromote'");
+        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodPromote'");
+        
     }
 
     /**
      * Tests ModelBenevole::isParticipant()
      */
-    public function testIsParticipant()
-    {
-        // TODO Auto-generated ModelBenevoleTest::testIsParticipant()
-        $this->markTestIncomplete("isParticipant test not implemented");
-
-        ModelBenevole::isParticipant(/* parameters */);
+    public function testIsParticipant() {
+        //on cree des variables pour les donnees "speciales"
+        $nonce = Security::generateRandomHex();
+        
+        //on ajoute un benevole
+        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodIsParticipant', 'testMethodIsParticipant', 'testMethodIsParticipant', 'testMethodIsParticipant', '01/06/1999', 'testMethodIsParticipant', 'testMethodIsParticipant', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodIsParticipant', 'testMethodIsParticipant', '01/06/1999', '02/06/1999', 'testMethodIsParticipant')");
+        
+        //on recupere les id des deux objets crees
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodIsParticipant'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodIsParticipant'");
+       
+        //on verifie que le benevole n'est pas participant avec la fonction
+        $bene = new ModelBenevole();
+        $isParticipant = $this->bene->isParticipant($idBene, $idFest);
+        $this->assertFalse($isParticipant);
+        
+        //on fait participer le benevole au festival
+        Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
+        
+        //on verifie que le benevole est participant avec la fonction
+        $isParticipant = $this->bene->isParticipant($idBene, $idFest);
+        $this->assertTrue($isParticipant);
+        
+        //on supprime les ojbets crees
+        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodIsParticipant'");
+        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodIsParticipant'");
     }
 
     /**
      * Tests ModelBenevole::getIDbyLogin()
      */
-    public function testGetIDbyLogin()
-    {
-        // TODO Auto-generated ModelBenevoleTest::testGetIDbyLogin()
-        $this->markTestIncomplete("getIDbyLogin test not implemented");
-
-        ModelBenevole::getIDbyLogin(/* parameters */);
+    public function testGetIDbyLogin() {
+        //on cree des variables pour les donnees "speciales"
+        $nonce = Security::generateRandomHex();
+        
+        //on ajoute un benevole
+        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodGetIdByLogin', 'testMethodGetIdByLogin', 'testMethodGetIdByLogin', 'testMethodGetIdByLogin', '01/06/1999', 'testMethodGetIdByLogin', 'testMethodGetIdByLogin', '" . $nonce . "');");
+        
+        //on recupere l'id du benevole "a la main"
+        $id = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodGetIdByLogin'");
+        
+        //on recupere l'id du benevole avec la fonction
+        $bene = new ModelBenevole();
+        $test = $this->bene->getIDbyLogin('testMethodGetIdByLogin');
+        
+        $this->assertEquals($id, $test);
     }
 
     /**
      * Tests ModelBenevole::isOrga()
      */
-    public function testIsOrga()
-    {
-        // TODO Auto-generated ModelBenevoleTest::testIsOrga()
-        $this->markTestIncomplete("isOrga test not implemented");
-
-        ModelBenevole::isOrga(/* parameters */);
+    public function testIsOrga() {
+        //on cree des variables pour les donnees "speciales"
+        $nonce = Security::generateRandomHex();
+        
+        //on ajoute un benevole
+        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodIsOrga', 'testMethodIsOrga', 'testMethodIsOrga', 'testMethodIsOrga', '01/06/1999', 'testMethodIsOrga', 'testMethodIsOrga', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodIsOrga', 'testMethodIsOrga', '01/06/1999', '02/06/1999', 'testMethodIsOrga')");
+        
+        //on recupere les id des deux objets crees
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodIsOrga'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodIsOrga'");
+        
+        //on fait participer le benevole au festival
+        Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
+        
+        //on verifie que le benevole n'est pas organisateur avec la fonction
+        $bene = new ModelBenevole();
+        $isOrga = $this->bene->isOrga($idBene, $idFest);
+        $this->assertFalse($isOrga);
+        
+        //on lui donne le rang d'organisateur
+        $this->bene->promote($idBene, $idFest);
+        
+        //on verifie que le benevole n'est pas organisateur avec la fonction
+        $isOrga = $this->bene->isOrga($idBene, $idFest);
+        $this->assertTrue($isOrga);
+        
+        //on supprime les ojbets crees
+        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodIsOrga'");
+        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodIsOrga'");       
     }
 
     /**
      * Tests ModelBenevole::isValide()
      */
-    public function testIsValide()
-    {
-        // TODO Auto-generated ModelBenevoleTest::testIsValide()
-        $this->markTestIncomplete("isValide test not implemented");
-
-        ModelBenevole::isValide(/* parameters */);
+    public function testIsValide() {
+        //on cree des variables pour les donnees "speciales"
+        $nonce = Security::generateRandomHex();
+        
+        //on ajoute un benevole
+        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodIsValide', 'testMethodIsValide', 'testMethodIsValide', 'testMethodIsValide', '01/06/1999', 'testMethodIsValide', 'testMethodIsValide', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodIsValide', 'testMethodIsValide', '01/06/1999', '02/06/1999', 'testMethodIsValide')");
+        
+        //on recupere les id des deux objets crees
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodIsValide'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodIsValide'");
+        
+        //on fait participer le benevole au festival
+        Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
+        
+        //on verifie que le benevole n'est pas valide avec la fonction
+        $bene = new ModelBenevole();
+        $isValide = $this->bene->isValide($idBene, $idFest);
+        $this->assertFalse($isValide);
+        
+        //on l'accepte
+        $this->bene->accept($idBene, $idFest);
+        
+        //on verifie que le benevole est bien valide avec la fonction
+        $isValide = $this->bene->isValide($idBene, $idFest);
+        $this->assertTrue($isValide);
+        
+        //on supprime les ojbets crees
+        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodIsValide'");
+        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodIsValide'");
     }
 
     /**
      * Tests ModelBenevole::nonce()
      */
-    public function testNonce()
-    {
-        // TODO Auto-generated ModelBenevoleTest::testNonce()
-        $this->markTestIncomplete("nonce test not implemented");
-
-        ModelBenevole::nonce(/* parameters */);
+    public function testNonce() {
+        //on cree des variables pour les donnees "speciales"
+        $nonce = Security::generateRandomHex();
+        
+        //on ajoute un benevole
+        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodNonce', 'testMethodNonce', 'testMethodNonce', 'testMethodNonce', '01/06/1999', 'testMethodNonce', 'testMethodNonce', '" . $nonce . "');");
+        
+        //on recupere les id des deux objets crees
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodNonce'");
+        
+        //on reinitialise le nonce avec la fonction
+        $bene = new ModelBenevole();
+        $this->bene->nonce($idBene);
+        
+        //on recupere la valeur de l'attribut nonce
+        $test =  Model::$pdo->query("SELECT nonce FROM benevole WHERE login = 'testMethodNonce'");
+        
+        //on verifie qu'il est "NULL"
+        $this->assertNull($test);
+    
+        //on sumpprime les objets crees
+        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodNonce'");
     }
 
     /**
      * Tests ModelBenevole::kick()
      */
-    public function testKick()
-    {
-        // TODO Auto-generated ModelBenevoleTest::testKick()
-        $this->markTestIncomplete("kick test not implemented");
-
-        ModelBenevole::kick(/* parameters */);
+    public function testKick() {
+        //on cree des variables pour les donnees "speciales"
+        $nonce = Security::generateRandomHex();
+        
+        //on ajoute un benevole
+        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodKick', 'testMethodKick', 'testMethodKick', 'testMethodKick', '01/06/1999', 'testMethodKick', 'testMethodKick', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodKick', 'testMethodKick', '01/06/1999', '02/06/1999', 'testMethodKick')");
+        
+        //on recupere les id des deux objets crees
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodKick'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodKick'");
+        
+        //on fait participer le benevole au festival
+        Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
+        
+        //on verifie qu'il est bien participant
+        $bene = new ModelBenevole();
+        $isPart = $this->bene->isParticipant($idBene, $idFest);
+        $this->assertTrue($isPart);
+        
+        //on le supprime du festival avec la fonction
+        $this->bene->kick($idBene, $idFest);
+        
+        //on verifie qu'il n'est plus participant
+        $isPart = $this->bene->isParticipant($idBene, $idFest);
+        $this->assertFalse($isPart);
     }
 
     /**
      * Tests ModelBenevole::getLastSaved()
      */
-    public function testGetLastSaved()
-    {
-        // TODO Auto-generated ModelBenevoleTest::testGetLastSaved()
-        $this->markTestIncomplete("getLastSaved test not implemented");
-
-        ModelBenevole::getLastSaved(/* parameters */);
+    public function testGetLastSaved() {
+        //on cree des variables pour les donnees "speciales"
+        $nonce = Security::generateRandomHex();
+        
+        //on ajoute un benevole
+        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodGetLastSaved', 'testMethodGetLastSaved', 'testMethodGetLastSaved', 'testMethodGetLastSaved', '01/06/1999', 'testMethodGetLastSaved', 'testMethodGetLastSaved', '" . $nonce . "');");
+        
+        //on recupere les id des deux objets crees
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodGetLastSaved'");
+        
+        $bene = new ModelBenevole();
+        $test = $this->bene->getLastSaved();
+        
+        $this->assertEquals($idBene, $test);
     }
 
     /**
@@ -348,8 +574,7 @@ class ModelBenevoleTest extends TestCase{
     /**
      * Tests ModelBenevole::supprimerBenevoleCreneau()
      */
-    public function testSupprimerBenevoleCreneau()
-    {
+    public function testSupprimerBenevoleCreneau() {
         // TODO Auto-generated ModelBenevoleTest::testSupprimerBenevoleCreneau()
         $this->markTestIncomplete("supprimerBenevoleCreneau test not implemented");
 
