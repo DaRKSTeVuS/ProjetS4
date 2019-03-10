@@ -74,23 +74,53 @@ class ModelPosteTest extends TestCase{
     /**
      * Tests ModelPoste::savePoste()
      */
-    public function testSavePoste()
-    {
-        // TODO Auto-generated ModelPosteTest::testSavePoste()
-        $this->markTestIncomplete("savePoste test not implemented");
-
-        ModelPoste::savePoste(/* parameters */);
+    public function testSavePoste() {
+        //on cree un festival et un poste
+        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodSavePoste', 'testMethodSavePoste', '01/06/1999', '02/06/1999', 'testMethodSavePoste')");
+        Model::$pdo->query("INSERT INTO poste (nomPoste) VALUES ('testMethodSavePoste')");
+        
+        //on recupere les id des deux objets crees
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodSavePoste'");
+        $idPoste = Model::$pdo->query("SELECT IDPoste FROM poste WHERE nomPoste = 'testMethodSavePoste'");
+       
+        //on verifie que le poste n'apparait pas pour ce festival
+        $test = Model::$pdo->query("SELECT * FROM link_PostesParFestival WHERE IDFestival = '". $idFest ."' AND IDPoste = '". $idPoste ."'");
+        $this->assertTrue(isEmpty($test));
+        
+        //on attribue le poste au festival
+        $poste = new ModelPoste();
+        $this->poste->savePoste($idFest, $idPoste);
+        
+        //on verifie que le poste existe pour ce festival
+        $test = Model::$pdo->query("SELECT IDPoste FROM link_PostesParFestival WHERE IDFestival = '". $idFest ."' AND IDPoste = '". $idPoste ."'");
+        $this->assertEquals($test, $idPoste);
+        
+        //on supprime les objets crees
+        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodSavePoste'");
+        Model::$pdo->query("DELETE FROM poste WHERE nomPoste = 'testMethodSavePoste'");
     }
 
     /**
      * Tests ModelPoste::dernierPosteSave()
      */
-    public function testDernierPosteSave()
-    {
-        // TODO Auto-generated ModelPosteTest::testDernierPosteSave()
-        $this->markTestIncomplete("dernierPosteSave test not implemented");
-
-        ModelPoste::dernierPosteSave(/* parameters */);
+    public function testDernierPosteSave() {
+        //on cree un festival et un poste
+        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodDernierPosteSave', 'testMethodDernierPosteSave', '01/06/1999', '02/06/1999', 'testMethodDernierPosteSave')");
+        Model::$pdo->query("INSERT INTO poste (nomPoste) VALUES ('testMethodDernierPosteSave')");
+        
+        //on recupere les id des deux objets crees
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodDernierPosteSave'");
+        $idPoste = Model::$pdo->query("SELECT IDPoste FROM poste WHERE nomPoste = 'testMethodDernierPosteSave'");
+        
+        //on attribue le poste au festival
+        $poste = new ModelPoste();
+        $this->poste->savePoste($idFest, $idPoste);
+        
+        $test = Model::$pdo->query("SELECT * FROM poste WHERE nomPoste = 'testMethodDernierPosteSave'");
+        
+        $last = $this->poste->dernierPosteSave();
+        
+        $this->assertEquals($test, $last);      
     }
 }
 
