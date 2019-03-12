@@ -227,12 +227,12 @@ class ModelBenevoleTest extends TestCase{
         $nonce = Security::generateRandomHex();
         
         //on ajoute un benevole
-        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodAccept', 'testMethodAccept', 'testMethodAccept', 'testMethodAccept', '01/06/1999', 'testMethodAccept', 'testMethodAccept', '" . $nonce . "');");
-        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodAccept', 'testMethodAccept', '01/06/1999', '02/06/1999', 'testMethodAccept')");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodAccept', 'testMethodAccept', 'testMethodAccept', 'testMethodAccept', '01/06/1999', 'testMethodAccept', 'testMethodAccept', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO Festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodAccept', 'testMethodAccept', '01/06/1999', '02/06/1999', 'testMethodAccept')");
         
         //on recupere les id des deux objets crees
-        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodAccept'");
-        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodAccept'");
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodAccept'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM Festival WHERE nomFestival = 'testMethodAccept'");
         
         //on fait participer le benevole au festival
         Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
@@ -250,8 +250,8 @@ class ModelBenevoleTest extends TestCase{
         $this->assertTrue($valide);
         
         //on supprime les ojbets crees
-        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodAccept'");
-        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodAccept'");
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodAccept'");
+        Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodAccept'");
     }
 
     /**
@@ -262,12 +262,12 @@ class ModelBenevoleTest extends TestCase{
         $nonce = Security::generateRandomHex();
         
         //on ajoute un benevole
-        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodPromote', 'testMethodPromote', 'testMethodPromote', 'testMethodPromote', '01/06/1999', 'testMethodPromote', 'testMethodPromote', '" . $nonce . "');");
-        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodPromote', 'testMethodPromote', '01/06/1999', '02/06/1999', 'testMethodPromote')");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodPromote', 'testMethodPromote', 'testMethodPromote', 'testMethodPromote', '01/06/1999', 'testMethodPromote', 'testMethodPromote', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO Festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodPromote', 'testMethodPromote', '01/06/1999', '02/06/1999', 'testMethodPromote')");
         
         //on recupere les id des deux objets crees
-        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodPromote'");
-        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodPromote'");
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodPromote'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM Festival WHERE nomFestival = 'testMethodPromote'");
        
         //on fait participer le benevole au festival
         Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
@@ -285,8 +285,8 @@ class ModelBenevoleTest extends TestCase{
         $this->assertTrue($isOrga);
         
         //on supprime les ojbets crees
-        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodPromote'");
-        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodPromote'");
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodPromote'");
+        Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodPromote'");
     }
 
     /**
@@ -298,12 +298,12 @@ class ModelBenevoleTest extends TestCase{
         $nonce = Security::generateRandomHex();
         
         //on ajoute un benevole
-        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodDemote', 'testMethodDemote', 'testMethodDemote', 'testMethodDemote', '01/06/1999', 'testMethodDemote', 'testMethodDemote', '" . $nonce . "');");
-        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodDemote', 'testMethodDemote', '01/06/1999', '02/06/1999', 'testMethodDemote')");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodDemote', 'testMethodDemote', 'testMethodDemote', 'testMethodDemote', '01/06/1999', 'testMethodDemote', 'testMethodDemote', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO Festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodDemote', 'testMethodDemote', '01/06/1999', '02/06/1999', 'testMethodDemote')");
         
         //on recupere les id des deux objets crees
-        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodDemote'");
-        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodDemote'");
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodDemote'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM Festival WHERE nomFestival = 'testMethodDemote'");
        
         //on fait participer le benevole au festival
         Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
@@ -324,8 +324,8 @@ class ModelBenevoleTest extends TestCase{
         $this->assertFalse($isOrga);
         
         //on supprime les ojbets crees
-        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodDemote'");
-        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodDemote'");
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodDemote'");
+        Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodDemote'");
         
     }
 
@@ -337,12 +337,12 @@ class ModelBenevoleTest extends TestCase{
         $nonce = Security::generateRandomHex();
         
         //on ajoute un benevole
-        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodReject', 'testMethodReject', 'testMethodReject', 'testMethodReject', '01/06/1999', 'testMethodReject', 'testMethodReject', '" . $nonce . "');");
-        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodReject', 'testMethodReject', '01/06/1999', '02/06/1999', 'testMethodReject')");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodReject', 'testMethodReject', 'testMethodReject', 'testMethodReject', '01/06/1999', 'testMethodReject', 'testMethodReject', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO Festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodReject', 'testMethodReject', '01/06/1999', '02/06/1999', 'testMethodReject')");
         
         //on recupere les id des deux objets crees
-        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodReject'");
-        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodReject'");
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodReject'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM Festival WHERE nomFestival = 'testMethodReject'");
         
         //on fait participer le benevole au festival
         Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
@@ -356,8 +356,8 @@ class ModelBenevoleTest extends TestCase{
         $this->assertFalse($iscandidat);
         
         //on supprime les ojbets crees
-        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodPromote'");
-        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodPromote'");
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodPromote'");
+        Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodPromote'");
         
     }
 
@@ -369,12 +369,12 @@ class ModelBenevoleTest extends TestCase{
         $nonce = Security::generateRandomHex();
         
         //on ajoute un benevole
-        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodIsParticipant', 'testMethodIsParticipant', 'testMethodIsParticipant', 'testMethodIsParticipant', '01/06/1999', 'testMethodIsParticipant', 'testMethodIsParticipant', '" . $nonce . "');");
-        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodIsParticipant', 'testMethodIsParticipant', '01/06/1999', '02/06/1999', 'testMethodIsParticipant')");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodIsParticipant', 'testMethodIsParticipant', 'testMethodIsParticipant', 'testMethodIsParticipant', '01/06/1999', 'testMethodIsParticipant', 'testMethodIsParticipant', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO Festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodIsParticipant', 'testMethodIsParticipant', '01/06/1999', '02/06/1999', 'testMethodIsParticipant')");
         
         //on recupere les id des deux objets crees
-        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodIsParticipant'");
-        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodIsParticipant'");
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodIsParticipant'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM Festival WHERE nomFestival = 'testMethodIsParticipant'");
        
         //on verifie que le benevole n'est pas participant avec la fonction
         $bene = new ModelBenevole();
@@ -389,8 +389,8 @@ class ModelBenevoleTest extends TestCase{
         $this->assertTrue($isParticipant);
         
         //on supprime les ojbets crees
-        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodIsParticipant'");
-        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodIsParticipant'");
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodIsParticipant'");
+        Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodIsParticipant'");
     }
 
     /**
@@ -401,10 +401,10 @@ class ModelBenevoleTest extends TestCase{
         $nonce = Security::generateRandomHex();
         
         //on ajoute un benevole
-        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodGetIdByLogin', 'testMethodGetIdByLogin', 'testMethodGetIdByLogin', 'testMethodGetIdByLogin', '01/06/1999', 'testMethodGetIdByLogin', 'testMethodGetIdByLogin', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodGetIdByLogin', 'testMethodGetIdByLogin', 'testMethodGetIdByLogin', 'testMethodGetIdByLogin', '01/06/1999', 'testMethodGetIdByLogin', 'testMethodGetIdByLogin', '" . $nonce . "');");
         
         //on recupere l'id du benevole "a la main"
-        $id = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodGetIdByLogin'");
+        $id = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodGetIdByLogin'");
         
         //on recupere l'id du benevole avec la fonction
         $bene = new ModelBenevole();
@@ -421,12 +421,12 @@ class ModelBenevoleTest extends TestCase{
         $nonce = Security::generateRandomHex();
         
         //on ajoute un benevole
-        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodIsOrga', 'testMethodIsOrga', 'testMethodIsOrga', 'testMethodIsOrga', '01/06/1999', 'testMethodIsOrga', 'testMethodIsOrga', '" . $nonce . "');");
-        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodIsOrga', 'testMethodIsOrga', '01/06/1999', '02/06/1999', 'testMethodIsOrga')");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodIsOrga', 'testMethodIsOrga', 'testMethodIsOrga', 'testMethodIsOrga', '01/06/1999', 'testMethodIsOrga', 'testMethodIsOrga', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO Festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodIsOrga', 'testMethodIsOrga', '01/06/1999', '02/06/1999', 'testMethodIsOrga')");
         
         //on recupere les id des deux objets crees
-        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodIsOrga'");
-        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodIsOrga'");
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodIsOrga'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM Festival WHERE nomFestival = 'testMethodIsOrga'");
         
         //on fait participer le benevole au festival
         Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
@@ -444,8 +444,8 @@ class ModelBenevoleTest extends TestCase{
         $this->assertTrue($isOrga);
         
         //on supprime les ojbets crees
-        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodIsOrga'");
-        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodIsOrga'");       
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodIsOrga'");
+        Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodIsOrga'");       
     }
 
     /**
@@ -456,12 +456,12 @@ class ModelBenevoleTest extends TestCase{
         $nonce = Security::generateRandomHex();
         
         //on ajoute un benevole
-        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodIsValide', 'testMethodIsValide', 'testMethodIsValide', 'testMethodIsValide', '01/06/1999', 'testMethodIsValide', 'testMethodIsValide', '" . $nonce . "');");
-        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodIsValide', 'testMethodIsValide', '01/06/1999', '02/06/1999', 'testMethodIsValide')");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodIsValide', 'testMethodIsValide', 'testMethodIsValide', 'testMethodIsValide', '01/06/1999', 'testMethodIsValide', 'testMethodIsValide', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO Festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodIsValide', 'testMethodIsValide', '01/06/1999', '02/06/1999', 'testMethodIsValide')");
         
         //on recupere les id des deux objets crees
-        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodIsValide'");
-        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodIsValide'");
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodIsValide'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM Festival WHERE nomFestival = 'testMethodIsValide'");
         
         //on fait participer le benevole au festival
         Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
@@ -479,8 +479,8 @@ class ModelBenevoleTest extends TestCase{
         $this->assertTrue($isValide);
         
         //on supprime les ojbets crees
-        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodIsValide'");
-        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodIsValide'");
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodIsValide'");
+        Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodIsValide'");
     }
 
     /**
@@ -491,23 +491,23 @@ class ModelBenevoleTest extends TestCase{
         $nonce = Security::generateRandomHex();
         
         //on ajoute un benevole
-        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodNonce', 'testMethodNonce', 'testMethodNonce', 'testMethodNonce', '01/06/1999', 'testMethodNonce', 'testMethodNonce', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodNonce', 'testMethodNonce', 'testMethodNonce', 'testMethodNonce', '01/06/1999', 'testMethodNonce', 'testMethodNonce', '" . $nonce . "');");
         
         //on recupere les id des deux objets crees
-        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodNonce'");
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodNonce'");
         
         //on reinitialise le nonce avec la fonction
         $bene = new ModelBenevole();
         $this->bene->nonce($idBene);
         
         //on recupere la valeur de l'attribut nonce
-        $test =  Model::$pdo->query("SELECT nonce FROM benevole WHERE login = 'testMethodNonce'");
+        $test =  Model::$pdo->query("SELECT nonce FROM Benevole WHERE login = 'testMethodNonce'");
         
         //on verifie qu'il est "NULL"
         $this->assertNull($test);
     
         //on sumpprime les objets crees
-        Model::$pdo->query("DELETE FROM benevole WHERE login = 'testMethodNonce'");
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodNonce'");
     }
 
     /**
@@ -518,15 +518,15 @@ class ModelBenevoleTest extends TestCase{
         $nonce = Security::generateRandomHex();
         
         //on ajoute un benevole
-        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodKick', 'testMethodKick', 'testMethodKick', 'testMethodKick', '01/06/1999', 'testMethodKick', 'testMethodKick', '" . $nonce . "');");
-        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodKick', 'testMethodKick', '01/06/1999', '02/06/1999', 'testMethodKick')");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodKick', 'testMethodKick', 'testMethodKick', 'testMethodKick', '01/06/1999', 'testMethodKick', 'testMethodKick', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO Festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodKick', 'testMethodKick', '01/06/1999', '02/06/1999', 'testMethodKick')");
         
         //on recupere les id des deux objets crees
-        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodKick'");
-        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodKick'");
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodKick'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM Festival WHERE nomFestival = 'testMethodKick'");
         
         //on fait participer le benevole au festival
-        Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
+        Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0);");
         
         //on verifie qu'il est bien participant
         $bene = new ModelBenevole();
@@ -539,6 +539,11 @@ class ModelBenevoleTest extends TestCase{
         //on verifie qu'il n'est plus participant
         $isPart = $this->bene->isParticipant($idBene, $idFest);
         $this->assertFalse($isPart);
+        
+        //on supprime les objets crees
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodKick'");
+        Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodKick'");
+        
     }
 
     /**
@@ -549,15 +554,18 @@ class ModelBenevoleTest extends TestCase{
         $nonce = Security::generateRandomHex();
         
         //on ajoute un benevole
-        Model::$pdo->query("INSERT INTO benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodGetLastSaved', 'testMethodGetLastSaved', 'testMethodGetLastSaved', 'testMethodGetLastSaved', '01/06/1999', 'testMethodGetLastSaved', 'testMethodGetLastSaved', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodGetLastSav', 'testMethodGetLastSaved', 'testMethodGetLastSaved', 'testMethodGetLastSaved', '01/06/1999', 'testMethodGetLastSaved', 'testMethodGetLastSaved', '" . $nonce . "');");
         
         //on recupere les id des deux objets crees
-        $idBene = Model::$pdo->query("SELECT IDBenevole FROM benevole WHERE login = 'testMethodGetLastSaved'");
+        $idBene = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodGetLastSav'");
         
         $bene = new ModelBenevole();
         $test = $this->bene->getLastSaved();
         
         $this->assertEquals($idBene, $test);
+        
+        //on supprime les objets crees
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodGetLastSav'");
     }
 
     /**
