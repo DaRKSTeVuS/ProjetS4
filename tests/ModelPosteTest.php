@@ -2,7 +2,7 @@
 use PHPUnit\Framework\TestCase;
 include '../src/lib/File.php';
 include '../src/lib/Security.php';
-include '../src/model/ModelBenevole.php';
+include '../src/model/ModelPoste.php';
 /**
  * ModelPoste test case.
  */
@@ -12,19 +12,15 @@ class ModelPosteTest extends TestCase{
      * Tests ModelPoste->__get()
      */
     public function test__get() {
-        $data = array(
-            "IDPoste" => null,
-            "nomPoste" => "testMethod__get",
-        );
         
         //on cree un poste
-        $this->modelPoste = new ModelPoste($data);
+        $this->modelPoste = new ModelPoste(456, "testMethod__get");
         
         //on recupere la valeur du nom
         $nom = $this->modelPoste->__get("nomPoste");
         
         //on verifie qu'elle est bien egale a celle donnee
-        $this->assertEquald("testMethod__get", $nom);
+        $this->assertEquals("testMethod__get", $nom);
     }
 
     /**
