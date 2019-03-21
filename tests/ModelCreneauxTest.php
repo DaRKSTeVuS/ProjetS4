@@ -2,6 +2,7 @@
 use PHPUnit\Framework\TestCase;
 include '../src/lib/File.php';
 include '../src/lib/Security.php';
+include '../src/model/Model.php';
 include '../src/model/ModelCreneaux.php';
 
 /**
@@ -64,14 +65,15 @@ class ModelCreneauxTest extends TestCase{
     public function testSelectAllCren() {
         //on selectionne tous les creneaux avec la fonction
         $cren = new ModelCreneaux();
-        $allCren = $cren->selectAllCren(74, 22);
+        $allCren = $cren->selectAllCren(74, 39);
         
         //on selectionne tous les creneaux "a la main"
-        $rep = Model::$pdo->query("SELECT * FROM Creneaux c JOIN link_PostesParFestival l ON c.IDPoste = l.IDPostee WHERE c.IDPoste = 74 AND l.IDFestival = 22;");
-        $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelCreneaux');
+        $rep = Model::$pdo->query("SELECT * FROM Creneaux c JOIN link_PostesParFestival l ON c.IDPoste = l.IDPoste WHERE c.IDPoste = 74 AND l.IDFestival = 39;");
+        $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelDisponibilites');
         $tab = $rep->fetchAll();
         
-        $this->assertEquals(sizeOf($tab), sifeOf($allCren));
+        
+        $this->assertEquals(sizeof($tab), sizeof($allCren));
         
         //on verifie que tous les elements des deux tableaux sont les memes
         for ($i = 0; $i < sizeof($allCren); $i++) {
