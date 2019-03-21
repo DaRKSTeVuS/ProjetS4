@@ -10,7 +10,7 @@ class ConfTest extends TestCase
     {
         $c = new Conf();
         self::assertSame($c->getDatabase(), 'alarconj');
-        self::assertSame($c->getHostname(), 'webinfo');
+        self::assertSame($c->getHostname(), 'webinfo.iutmontp.univ-montp2.fr');
         self::assertSame($c->getLogin(), 'alarconj');
         self::assertSame($c->getpassword(), '0808048000U');
     }
@@ -24,7 +24,7 @@ class ConfTest extends TestCase
     public function testGetHostName()
     {
         $c = new Conf();
-        self::assertSame($c->getHostname(), 'webinfo');
+        self::assertSame($c->getHostname(), 'webinfo.iutmontp.univ-montp2.fr');
     }
 
     public function testGetDataBase()
