@@ -100,13 +100,9 @@ class ModelBenevoleTest extends TestCase
         $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
         $tab = $rep->fetchAll();
 
-        // on v�rifie que les deux tableaux de r�ponses ont la m�me taille
-        self::assertEquals(sizeof($tab), sizeof($allOrga));
+        // On vérifie que les deux tableaux soient les mêmes
+        self::assertEquals($tab, $allOrga);
 
-        // on v�rifie que tous les �l�ments des deux tableaux sont les m�mes
-        for ($i = 0; $i < sizeof($allOrga); $i ++) {
-            self::assertEquals($allOrga[$i], $tab[$i]);
-        }
     }
 
     /**
@@ -121,8 +117,8 @@ class ModelBenevoleTest extends TestCase
         $rep = Model::$pdo->query("SELECT b.IDBenevole, b.login, b.password, b.nom, b.prenom, b.dateNaiss, b.email, b.numTelephone, b.nonce FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 2 AND l.valide = 1;");
         $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
         $tab = $rep->fetchAll();
-        
-        // On vérifie que les deux tableaux sont les mêmes
+       
+        // On vérifie que les deux tableaux soient les mêmes
         self::assertEquals($tab, $allBene);
     }
 
@@ -135,17 +131,12 @@ class ModelBenevoleTest extends TestCase
         $allDemandes = ModelBenevole::readAllDemandes(1);
 
         // on r�cup�re toutes les demandes de b�n�volat "� la main"
-        $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.valide = 0;");
+        $rep = Model::$pdo->query("SELECT b.IDBenevole, b.login, b.password, b.nom, b.prenom, b.dateNaiss, b.email, b.numTelephone, b.nonce FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.valide = 0;");
         $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
         $tab = $rep->fetchAll();
         
-        // on v�rifie que les deux tableaux de r�ponses ont la m�me taille
-        self::assertEquals(sizeOf($tab), sizeOf($allDemandes));
-
-        // on v�rifie que tous les �l�ments des deux tableaux sont les m�mes
-        for ($i = 0; $i < sizeof($allDemandes); $i ++) {
-            self::assertEquals($allDemandes[$i], $tab[$i]);
-        }
+        // On vérifie que les deux tableaux soient les mêmes
+        self::assertEquals($tab, $allDemandes);
     }
 
     /**
