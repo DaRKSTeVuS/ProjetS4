@@ -568,8 +568,9 @@ class ModelBenevoleTest extends TestCase
             Model::$pdo->query("INSERT INTO Festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodIsValide', 'testMethodIsValide', '01/06/1999', '02/06/1999', 'testMethodIsValide')");
 
             // on recupere les id des deux objets crees
-            $req = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodIsValide'");
+            $req = Model::$pdo->query("SELECT IDBenevole, login FROM Benevole WHERE login = 'testMethodIsValide'");
             $idBene = $req->fetchAll(PDO::FETCH_OBJ);
+            $logBene = $idBene[0]->login;
             $idBene = $idBene[0]->IDBenevole;
             $req = Model::$pdo->query("SELECT IDFestival FROM Festival WHERE nomFestival = 'testMethodIsValide'");
             $idFest = $req->fetchAll(PDO::FETCH_OBJ);
@@ -585,10 +586,10 @@ class ModelBenevoleTest extends TestCase
             ModelBenevole::accept($idBene, $idFest);
 
             // on verifie que le benevole est bien valide avec la fonction
-            $isValide = ModelBenevole::isValide($idBene, $idFest);
+            $isValide = ModelBenevole::isValide($logBene, $idFest);
 
             self::assertFalse($unisValide);
-            self::assertTrue($isValide);
+            self::assertEquals(1, $isValide);
         } catch (PDOException $e) {
             // On affiche le message d'erreur
             echo $e->getMessage();
