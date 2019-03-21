@@ -6,7 +6,7 @@ include '../src/model/ModelPoste.php';
 /**
  * ModelPoste test case.
  */
-class ModelPosteTest extends TestCase{
+class ModelPostesTest extends TestCase{
 
     /**
      * Tests ModelPoste->__get()
@@ -20,7 +20,7 @@ class ModelPosteTest extends TestCase{
         $nom = $this->modelPoste->__get("nomPoste");
         
         //on verifie qu'elle est bien egale a celle donnee
-        $this->assertEquals("testMethod__get", $nom);
+        self::assertEquals("testMethod__get", $nom);
     }
 
     /**
@@ -43,7 +43,7 @@ class ModelPosteTest extends TestCase{
         $nom = $this->modelPoste->__get("nomPoste");
         
         //on verifie qu'elle est bien egale a la nouvelle valeur
-        $this->assertEquals("testMethod__set2", $nom);
+        self::assertEquals("testMethod__set2", $nom);
     }
 
     /**
@@ -59,11 +59,11 @@ class ModelPosteTest extends TestCase{
         $poste = new ModelPoste();
         $allPoste = $this->poste->getPostebyFestival("2");
         
-        $this->assertEquals(sizeOf($rep), sizeOf($allPoste));
+        self::assertEquals(sizeOf($rep), sizeOf($allPoste));
         
         //on verifie que tous les elements des deux tableaux sont les memes
         for ($i = 0; $i < $allPoste; $i++) {
-            $this->assertEquals($allPoste[$i], $rep[$i]);
+            self::assertEquals($allPoste[$i], $rep[$i]);
         }
     }
 
@@ -72,16 +72,16 @@ class ModelPosteTest extends TestCase{
      */
     public function testSavePoste() {
         //on cree un festival et un poste
-        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodSavePoste', 'testMethodSavePoste', '01/06/1999', '02/06/1999', 'testMethodSavePoste')");
-        Model::$pdo->query("INSERT INTO poste (nomPoste) VALUES ('testMethodSavePoste')");
+        Model::$pdo->query("INSERT INTO Festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodSavePoste', 'testMethodSavePoste', '01/06/1999', '02/06/1999', 'testMethodSavePoste')");
+        Model::$pdo->query("INSERT INTO Poste (nomPoste) VALUES ('testMethodSavePoste')");
         
         //on recupere les id des deux objets crees
-        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodSavePoste'");
-        $idPoste = Model::$pdo->query("SELECT IDPoste FROM poste WHERE nomPoste = 'testMethodSavePoste'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM Festival WHERE nomFestival = 'testMethodSavePoste'");
+        $idPoste = Model::$pdo->query("SELECT IDPoste FROM Poste WHERE nomPoste = 'testMethodSavePoste'");
        
         //on verifie que le poste n'apparait pas pour ce festival
         $test = Model::$pdo->query("SELECT * FROM link_PostesParFestival WHERE IDFestival = '". $idFest ."' AND IDPoste = '". $idPoste ."'");
-        $this->assertTrue(isEmpty($test));
+        self::assertTrue(isEmpty($test));
         
         //on attribue le poste au festival
         $poste = new ModelPoste();
@@ -89,11 +89,11 @@ class ModelPosteTest extends TestCase{
         
         //on verifie que le poste existe pour ce festival
         $test = Model::$pdo->query("SELECT IDPoste FROM link_PostesParFestival WHERE IDFestival = '". $idFest ."' AND IDPoste = '". $idPoste ."'");
-        $this->assertEquals($test, $idPoste);
+        self::assertEquals($test, $idPoste);
         
         //on supprime les objets crees
-        Model::$pdo->query("DELETE FROM festival WHERE nomFestival = 'testMethodSavePoste'");
-        Model::$pdo->query("DELETE FROM poste WHERE nomPoste = 'testMethodSavePoste'");
+        Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodSavePoste'");
+        Model::$pdo->query("DELETE FROM Poste WHERE nomPoste = 'testMethodSavePoste'");
     }
 
     /**
@@ -101,22 +101,22 @@ class ModelPosteTest extends TestCase{
      */
     public function testDernierPosteSave() {
         //on cree un festival et un poste
-        Model::$pdo->query("INSERT INTO festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodDernierPosteSave', 'testMethodDernierPosteSave', '01/06/1999', '02/06/1999', 'testMethodDernierPosteSave')");
-        Model::$pdo->query("INSERT INTO poste (nomPoste) VALUES ('testMethodDernierPosteSave')");
+        Model::$pdo->query("INSERT INTO Festival (nomFestival, lieuFestival, dateDebutF, dateFinF, description) VALUES ('testMethodDernierPosteSave', 'testMethodDernierPosteSave', '01/06/1999', '02/06/1999', 'testMethodDernierPosteSave')");
+        Model::$pdo->query("INSERT INTO Poste (nomPoste) VALUES ('testMethodDernierPosteSave')");
         
         //on recupere les id des deux objets crees
-        $idFest = Model::$pdo->query("SELECT IDFestival FROM festival WHERE nomFestival = 'testMethodDernierPosteSave'");
-        $idPoste = Model::$pdo->query("SELECT IDPoste FROM poste WHERE nomPoste = 'testMethodDernierPosteSave'");
+        $idFest = Model::$pdo->query("SELECT IDFestival FROM Festival WHERE nomFestival = 'testMethodDernierPosteSave'");
+        $idPoste = Model::$pdo->query("SELECT IDPoste FROM Poste WHERE nomPoste = 'testMethodDernierPosteSave'");
         
         //on attribue le poste au festival
         $poste = new ModelPoste();
         $this->poste->savePoste($idFest, $idPoste);
         
-        $test = Model::$pdo->query("SELECT * FROM poste WHERE nomPoste = 'testMethodDernierPosteSave'");
+        $test = Model::$pdo->query("SELECT * FROM Poste WHERE nomPoste = 'testMethodDernierPosteSave'");
         
         $last = $this->poste->dernierPosteSave();
         
-        $this->assertEquals($test, $last);      
+        self::assertEquals($test, $last);      
     }
 }
 

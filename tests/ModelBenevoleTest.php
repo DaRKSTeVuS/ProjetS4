@@ -38,13 +38,13 @@ class ModelBenevoleTest extends TestCase{
             );
         
         //on cr�e un b�n�vole
-        $this->modelBenevole = new ModelBenevole($data);
+        $bene = new ModelBenevole($data);
         
         //on r�cup�re la valeur du login avec la fonction
-        $log = $this->modelBenevole->__get("login");
+        $log = $bene->__get("login");
         
         //on v�rifie qu'il est bien �gal au login donn�
-        $this->assertEquals("testMethod__get", $log);
+        self::assertEquals("testMethod__get", $log);
     }
 
     /**
@@ -69,16 +69,16 @@ class ModelBenevoleTest extends TestCase{
         );
         
         //on cr�e un b�n�vole
-        $this->modelBenevole = new ModelBenevole($data);
+        $bene = new ModelBenevole($data);
         
         //on modifie la valeur du login avec la fonction
-        $this->modelBenevole->__set("login", "testMethod__set2");
+        $bene->__set("login", "testMethod__set2");
         
         //on r�cup�re la valeur du login
-        $log = $this->modelBenevole->__get("login");
+        $log = $bene->__get("login");
         
         //on v�rifie que cette valeur correspond � la nouvelle valeur donn�e
-        $this->assertEquals("testMethod__set2", $log);
+        self::assertEquals("testMethod__set2", $log);
     }
 
     /**
@@ -87,19 +87,19 @@ class ModelBenevoleTest extends TestCase{
     public function testReadAllOrga() {
         //on r�cup�re tous les organisateurs d'un festival avec la fonction
         $bene = new ModelBenevole();
-        $allOrga = $this->bene->readAllOrga(1);
+        $allOrga = $bene->readAllOrga(1);
         
         //on r�cup�re tous les organisateur d'un festival "� la main"
-        $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ONb.IDBenevole = l.IDBenevole WHERE l.IDFestival == 1 AND l.isOrganisateur = 1;");
+        $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.isOrganisateur = 1;");
         $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
         $rep->fetchAll();
         
         //on v�rifie que les deux tableaux de r�ponses ont la m�me taille
-        $this->assertEquals(sizeOf($rep), sifeOf($allOrga));
+        self::assertEquals(sizeOf($rep), sifeOf($allOrga));
         
         //on v�rifie que tous les �l�ments des deux tableaux sont les m�mes
         for ($i = 0; $i < $allOrga; $i++) {
-            $this->assertEquals($allOrga[$i], $rep[$i]);
+            self::assertEquals($allOrga[$i], $rep[$i]);
         }
     }
 
@@ -109,7 +109,7 @@ class ModelBenevoleTest extends TestCase{
     public function testReadAllBene() {
         //on r�cup�re tous les b�n�voles d'un festival avec la fonction
         $bene = new ModelBenevole();
-        $allBene = $this->bene->readAllBene(1);
+        $allBene = $bene->readAllBene(1);
         
         //on r�cup�re tous les b�n�voles d'un festival "� la main"
         $rep = Model::$pdo->query("SELECT * FROM Benevole b JOINlink_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.valide = 1;");
@@ -117,11 +117,11 @@ class ModelBenevoleTest extends TestCase{
         $rep->fetchAll();
         
         //on v�rifie que les deux tableaux de r�ponses ont la m�me taille
-        $this->assertEquals(sizeOf($rep), sifeOf($allBene));
+        self::assertEquals(sizeOf($rep), sifeOf($allBene));
         
         //on v�rifie que tous les �l�ments des deux tableaux sont les m�mes
         for ($i = 0; $i < $allBene; $i++) {
-            $this->assertEquals($allBene[$i], $rep[$i]);
+            self::assertEquals($allBene[$i], $rep[$i]);
         }
     }
 
@@ -131,7 +131,7 @@ class ModelBenevoleTest extends TestCase{
     public function testReadAllDemandes() {
         //on r�cup�re toutes les demandes de b�n�volat avec la fonction
         $bene = new ModelBenevole();
-        $allDemandes = $this->bene->readAllDemandes(1);
+        $allDemandes = $bene->readAllDemandes(1);
      
         //on r�cup�re toutes les demandes de b�n�volat "� la main"
         $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.valide = 0;");
@@ -139,11 +139,11 @@ class ModelBenevoleTest extends TestCase{
         $rep->fetchAll();
         
         //on v�rifie que les deux tableaux de r�ponses ont la m�me taille
-        $this->assertEquals(sizeOf($rep), sifeOf($allDemandes));
+        self::assertEquals(sizeOf($rep), sifeOf($allDemandes));
         
         //on v�rifie que tous les �l�ments des deux tableaux sont les m�mes
         for ($i = 0; $i < $allDemandes; $i++) {
-            $this->assertEquals($allDemandes[$i], $rep[$i]);
+            self::assertEquals($allDemandes[$i], $rep[$i]);
         }
     }
 
