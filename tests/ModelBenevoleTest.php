@@ -10,12 +10,8 @@ include '../src/model/ModelFestival.php';
 /**
  * ModelBenevole test case.
  */
-<<<<<<< HEAD
-class ModelBenevoleTest extends TestCase
+class ModelBenevoleTest extends TestCase 
 {
-=======
-class ModelBenevoleTest extends TestCase {
->>>>>>> b61514a8dbe5b169f4762968f95882f4eb98219e
 
     /**
      *
@@ -298,7 +294,6 @@ class ModelBenevoleTest extends TestCase {
      * Tests ModelBenevole::promote()
      */
     
-    /*
     public function testPromote() {
         try {
         // on cree des variables pour les donnees "speciales"
@@ -348,13 +343,10 @@ class ModelBenevoleTest extends TestCase {
         }
 
     }
-    */
     
     /**
      * Tests ModelBenevole::demote()
      */
-    
-    /*
     public function testDemote() {
         try {
         // on cree des variables pour les donnees "speciales"
@@ -407,7 +399,6 @@ class ModelBenevoleTest extends TestCase {
         }
 
     }
-    */
     
     /**
      * Tests ModelBenevole::reject()
