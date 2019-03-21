@@ -148,8 +148,7 @@ class ModelBenevoleTest extends TestCase
     public function testIsPref()
     {
         // on r�cup�re la valeur d'une pr�f�rence d'un b�n�vole pour un poste avec la fonction
-        $bene = new ModelBenevole();
-        $pref = $bene->isPref(1, 46);
+        $pref = ModelBenevole::isPref(1, 46);
 
         // on r�cup�re la valeur d'une pr�f�rence d'un b�n�vole pour un poste "� la main"
         $rep = Model::$pdo->query("SELECT * FROM link_PreferenceBenevolePostes WHERE IDBenevole = 1 AND IDPoste = 46;");
@@ -191,8 +190,7 @@ class ModelBenevoleTest extends TestCase
         try {
 
             // on v�rifie si un mot de passe est correct avec la fonction
-            $bene = new ModelBenevole();
-            $test = $bene->checkPassword("testMethodCheck", "testMethodCheck");
+            $test = ModelBenevole::checkPassword("testMethodCheck", "testMethodCheck");
 
             // on v�rifie que le mot de passe n'est pas correct
             self::assertFalse($test);
@@ -203,7 +201,7 @@ class ModelBenevoleTest extends TestCase
             Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodCheck', 'testMethodCheck', 'testMethodCheck', 'testMethodCheck', '01/06/1999', 'testMethodCheck', 'testMethodCheck', '" . $nonce . "');");
 
             // on v�rifie si un mot de passe est correct avec la fonction
-            $test2 = $bene->checkPassword("testMethodCheck", "testMethodCheck");
+            $test2 = ModelBenevole::checkPassword("testMethodCheck", "testMethodCheck");
 
             // on v�rifie que le mot de passe est correct
             self::assertTrue($test2);
