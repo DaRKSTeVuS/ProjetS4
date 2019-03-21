@@ -104,7 +104,7 @@ class ModelTest extends TestCase
             self::assertNotEmpty($log);
 
             // on v�rifie que l'�l�ment existe dans la base de donn�es
-            self::assertEquals($log[0], "testMethodSave");
+            self::assertEquals($log[0]->login, "testMethodSave");
         } catch (PDOException $e) {
             // On affiche le message d'erreur
             echo $e->getMessage();
@@ -169,7 +169,7 @@ class ModelTest extends TestCase
         // on s�lectionne l'id correspondant aux donn�es que l'on va modifier
         $rep = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodUpdate';");
         $id = $rep->fetchAll(PDO::FETCH_OBJ);
-        $id = $id[0]->fetchAll();
+        $id = $id[0]->IDBenevole;
 
         // on cr�e un tableau de nouvelles valeurs
         $values = array(
@@ -185,20 +185,20 @@ class ModelTest extends TestCase
         );
 
         // on met � jour les donn�es avec la m�thode
-        ModelBenevole::update($rep, $values);
+        ModelBenevole::update($id, $values);
 
         // on s�lectionne les donn�es ayant les anciennes valeurs
-        $rep2 = Model::$pdo->query("SELECT login FROM Benevole WHERE login = 'testMethodUpdate';");
-        $log = $rep2->fetchAll(PDO::FETCH_OBJ);
+        $rep = Model::$pdo->query("SELECT login FROM Benevole WHERE login = 'testMethodUpdate';");
+        $log = $rep->fetchAll(PDO::FETCH_OBJ);
 
         // on v�rifie que les donn�es avec les anciennes valeurs n'existent plus dans la base de donn�es
-        $this->assertEmpty($log);
+       self::assertEmpty($log);
 
         // on s�lectionne les donn�es ayant les nouvelles valeurs
         $rep = Model::$pdo->query("SELECT login FROM Benevole WHERE login = 'testMethodUpdateToDate';");
         $log = $rep->fetchAll(PDO::FETCH_OBJ);
         $log = $log[0]->login;
-        
+                
         // on v�rifie que les donn�es avec les nouvelles valeurs existent dans la base de donn�es
         self::assertEquals($log, "testMethodUpdateToDate");
         
@@ -209,6 +209,7 @@ class ModelTest extends TestCase
             self::fail("Il ne devrait pas y avoir d'erreur");
         } finally {
         // on supprime le b�n�vole cr�� pour le test
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodUpdate';");
         Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodUpdateToDate';");
         }
     }
