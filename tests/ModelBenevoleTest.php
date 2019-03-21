@@ -91,15 +91,15 @@ class ModelBenevoleTest extends TestCase{
         
         //on r�cup�re tous les organisateur d'un festival "� la main"
         $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.isOrganisateur = 1;");
-        $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
-        $rep->fetchAll();
+        $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
+        $tab = $rep->fetchAll();
         
         //on v�rifie que les deux tableaux de r�ponses ont la m�me taille
-        self::assertEquals(sizeOf($rep), sifeOf($allOrga));
+        self::assertEquals(sizeof($tab), sizeof($allOrga));
         
         //on v�rifie que tous les �l�ments des deux tableaux sont les m�mes
-        for ($i = 0; $i < $allOrga; $i++) {
-            self::assertEquals($allOrga[$i], $rep[$i]);
+        for ($i = 0; $i < sizeof($allOrga); $i++) {
+            self::assertEquals($allOrga[$i], $tab[$i]);
         }
     }
 
@@ -109,19 +109,19 @@ class ModelBenevoleTest extends TestCase{
     public function testReadAllBene() {
         //on r�cup�re tous les b�n�voles d'un festival avec la fonction
         $bene = new ModelBenevole();
-        $allBene = $bene->readAllBene(1);
+        $allBene = $bene->readAllBene(2);
         
         //on r�cup�re tous les b�n�voles d'un festival "� la main"
-        $rep = Model::$pdo->query("SELECT * FROM Benevole b JOINlink_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.valide = 1;");
-        $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
-        $rep->fetchAll();
+        $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 2 AND l.valide = 1;");
+        $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
+        $tab = $rep->fetchAll();
         
         //on v�rifie que les deux tableaux de r�ponses ont la m�me taille
-        self::assertEquals(sizeOf($rep), sifeOf($allBene));
+        self::assertEquals(sizeOf($tab), sizeOf($allBene));
         
         //on v�rifie que tous les �l�ments des deux tableaux sont les m�mes
-        for ($i = 0; $i < $allBene; $i++) {
-            self::assertEquals($allBene[$i], $rep[$i]);
+        for ($i = 0; $i < sizeof($allBene); $i++) {
+            self::assertEquals($allBene[$i], $tab[$i]);
         }
     }
 
@@ -135,15 +135,15 @@ class ModelBenevoleTest extends TestCase{
      
         //on r�cup�re toutes les demandes de b�n�volat "� la main"
         $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.valide = 0;");
-        $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
-        $rep->fetchAll();
+        $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
+        $tab = $rep->fetchAll();
         
         //on v�rifie que les deux tableaux de r�ponses ont la m�me taille
-        self::assertEquals(sizeOf($rep), sifeOf($allDemandes));
+        self::assertEquals(sizeOf($tab), sizeOf($allDemandes));
         
         //on v�rifie que tous les �l�ments des deux tableaux sont les m�mes
-        for ($i = 0; $i < $allDemandes; $i++) {
-            self::assertEquals($allDemandes[$i], $rep[$i]);
+        for ($i = 0; $i < sizeof($allDemandes); $i++) {
+            self::assertEquals($allDemandes[$i], $tab[$i]);
         }
     }
 
@@ -153,20 +153,20 @@ class ModelBenevoleTest extends TestCase{
     public function testIsPref() {
         //on r�cup�re la valeur d'une pr�f�rence d'un b�n�vole pour un poste avec la fonction
         $bene = new ModelBenevole();
-        $pref = $this->bene->isPref(1, 46);
+        $pref = $bene->isPref(1, 46);
         
         //on r�cup�re la valeur d'une pr�f�rence d'un b�n�vole pour un poste "� la main"
-        $rep = Model::$pdo->query("SELECT * FROM link_PreferenceBenevolePostes WHERE IDFestival = 1 AND IDPoste = 46;");
-        $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
-        $rep->fetchAll();
-        if(empty($rep)){
+        $rep = Model::$pdo->query("SELECT * FROM link_PreferenceBenevolePostes WHERE IDBenevole = 1 AND IDPoste = 46;");
+        $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
+        $tab = $rep->fetchAll();
+        if(empty($tab)){
             $test = 0;
         }else{
             $test = 1;
         }
         
         //on v�rifie que les deux valeurs soient les m�mes
-        $this->assertEquals($pref, $test);
+        self::assertEquals($pref, $test);
     }
 
     /**
@@ -175,19 +175,19 @@ class ModelBenevoleTest extends TestCase{
     public function testReadAllDemandesOrga() {
         //on r�cup�re toutes les demandes d'organisation de b�n�voles avec la fonction
         $bene = new ModelBenevole();
-        $allDemandesOrga = $this->bene->readAllDemandesOrga(1);
+        $allDemandesOrga = $bene->readAllDemandesOrga(63);
         
         //on r�cup�re toutes les demandes d'organisation de b�n�voles "� la main"
-        $rep = Model::$pdo->query("SELET * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.candidat = 1;");
-        $rep->setFetchMode(PDO::FETCH_CLASS, Benevole);
-        $rep->fetchAll();
+        $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 63 AND l.candidat = 1;");
+        $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
+        $tab = $rep->fetchAll();
         
         //on v�rifie que les deux tableaux de r�ponses ont la m�me taille
-        $this->assertEquals(sizeOf($rep), sifeOf($allDemandesOrga));
+        self::assertEquals(sizeOf($tab), sizeOf($allDemandesOrga));
         
         //on v�rifie que tous les �l�ments des deux tableaux sont les m�mes
-        for ($i = 0; $i < $allDemandesOrga; $i++) {
-            $this->assertEquals($allDemandesOrga[$i], $rep[$i]);
+        for ($i = 0; $i < sizeof($allDemandesOrga); $i++) {
+           self::assertEquals($allDemandesOrga[$i], $tab[$i]);
         }
     }
 
@@ -197,26 +197,25 @@ class ModelBenevoleTest extends TestCase{
     public function testCheckPassword() {
         //on v�rifie si un mot de passe est correct avec la fonction
         $bene = new ModelBenevole();
-        $test = $this->bene->checkPassword("testMethodCheckPassword", "testMethodCheckPassword");
+        $test = $bene->checkPassword("testMethodCheck", "testMethodCheck");
         
         //on v�rifie que le mot de passe n'est pas correct
-        $this->assertFalse($test);
+        self::assertFalse($test);
         
         //on cr�e des variables pour les donn�es "sp�ciales"
         $nonce = Security::generateRandomHex();
-        $id = null;
         
         //on ajoute un b�n�vole � la base de donn�es
-        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodCheckPassword', 'testMethodCheckPassword', 'testMethodCheckPassword', 'testMethodCheckPassword', '01/06/1999', 'testMethodCheckPassword', 'testMethodCheckPassword', '" . $nonce . "');");
+        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodCheck', 'testMethodCheck', 'testMethodCheck', 'testMethodCheck', '01/06/1999', 'testMethodCheck', 'testMethodCheck', '" . $nonce . "');");
         
         //on v�rifie si un mot de passe est correct avec la fonction
-        $test2 = $this->bene->checkPassword("testMethodCheckPassword", "testMethodCheckPassword");
+        $test2 = $bene->checkPassword("testMethodCheck", "testMethodCheck");
         
         //on supprime le b�n�vole cr�� pour le test
-        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodCheckPassword';");
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodCheck';");
         
         //on v�rifie que le mot de passe est correct
-        $this->assertTrue($test2);
+        self::assertTrue($test2);
     }
 
     /**
@@ -233,16 +232,16 @@ class ModelBenevoleTest extends TestCase{
         //on recupere les id des deux objets crees
         $idBene = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodAccept'");
         $idFest = Model::$pdo->query("SELECT IDFestival FROM Festival WHERE nomFestival = 'testMethodAccept'");
-        
+                
         //on fait participer le benevole au festival
-        Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
+        Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0);");
         
         //on verifie que l'attribut "valide" est bien a "false"
         $unvalide = Model::$pdo->query("SELECT valide FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
         
         //on rend la participation valide avec la fonction
         $bene = new ModelBenevole();
-        $this->bene->accept($idBene, $idFest);
+        $bene->accept($idBene, $idFest);
         
         //on verifie que l'attribut "valide" est bien passe a "true"
         $valide = Model::$pdo->query("SELECT valide FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
@@ -252,8 +251,8 @@ class ModelBenevoleTest extends TestCase{
         Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodAccept'");
         Model::$pdo->query("DELETE FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
         
-        $this->assertFalse($unvalide);
-        $this->assertTrue($valide);
+        self::assertFalse($unvalide);
+        self::assertTrue($valide);
     }
 
     /**
@@ -279,7 +278,7 @@ class ModelBenevoleTest extends TestCase{
         
         //on donne le rang d'organisateur au benevole avec la fonction
         $bene = new ModelBenevole();
-        $this->bene->promote($idBene, $idFest);
+        $bene->promote($idBene, $idFest);
         
         //on verifie que l'attribut "isOrganisateur" est bien passe a "true"
         $isOrga = Model::$pdo->query("SELECT isOrganisateur FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
@@ -289,8 +288,8 @@ class ModelBenevoleTest extends TestCase{
         Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodPromote'");
         Model::$pdo->query("DELETE FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
         
-        $this->assertFalse($unisOrga);
-        $this->assertTrue($isOrga);
+        self::assertFalse($unisOrga);
+        self::assertTrue($isOrga);
     }
 
     /**
@@ -314,13 +313,13 @@ class ModelBenevoleTest extends TestCase{
         
         //on donne le rang d'organisateur au benevole avec la fonction
         $bene = new ModelBenevole();
-        $this->bene->promote($idBene, $idFest);
+        $bene->promote($idBene, $idFest);
         
         //on verifie que l'attribut "isOrganisateur" est bien a "true"
         $isOrga = Model::$pdo->query("SELECT isOrganisateur FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
         
         //on enleve le rang d'organisateur au benevole avec la fonction
-        $this->bene->demote();
+        $bene->demote();
         
         //on verifie que l'attribut "isOrganisateur" est bien passe a "false"
         $unisOrga = Model::$pdo->query("SELECT isOrganisateur FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
@@ -330,8 +329,8 @@ class ModelBenevoleTest extends TestCase{
         Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodDemote'");
         Model::$pdo->query("DELETE FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
         
-        $this->assertTrue($isOrga);
-        $this->assertFalse($unisOrga);  
+        self::assertTrue($isOrga);
+        self::assertFalse($unisOrga);  
     }
 
     /**
@@ -354,7 +353,7 @@ class ModelBenevoleTest extends TestCase{
         
         //on rejette le benevole avec la fonction
         $bene = new ModelBenevole();
-        $this->bene->reject($idBene, $idFest);
+        $bene->reject($idBene, $idFest);
         
         //on verifie que l'attribut "candidat" est bien passe a "false"
         $uniscandidat = Model::$pdo->query("SELECT candidat FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
@@ -364,7 +363,7 @@ class ModelBenevoleTest extends TestCase{
         Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodReject'");
         Model::$pdo->query("DELETE FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
         
-        $this->assertFalse($uniscandidat);
+        self::assertFalse($uniscandidat);
         
     }
 
@@ -385,21 +384,21 @@ class ModelBenevoleTest extends TestCase{
        
         //on verifie que le benevole n'est pas participant avec la fonction
         $bene = new ModelBenevole();
-        $unisParticipant = $this->bene->isParticipant($idBene, $idFest);
+        $unisParticipant = $bene->isParticipant($idBene, $idFest);
         
         //on fait participer le benevole au festival
         Model::$pdo->query("INSERT INTO link_BenevoleParticipeFestival VALUES (". $idFest .", ". $idBene .", 0, 0, 0)");
         
         //on verifie que le benevole est participant avec la fonction
-        $isParticipant = $this->bene->isParticipant($idBene, $idFest);
+        $isParticipant = $bene->isParticipant($idBene, $idFest);
         
         //on supprime les ojbets crees
         Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodIsParticip'");
         Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodIsParticip'");
         Model::$pdo->query("DELETE FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest . " AND IDBenevole = " . $idBene . ";");
         
-        $this->assertFalse($unisParticipant);
-        $this->assertTrue($isParticipant);
+        self::assertFalse($unisParticipant);
+        self::assertTrue($isParticipant);
     }
 
     /**
@@ -417,11 +416,11 @@ class ModelBenevoleTest extends TestCase{
         
         //on recupere l'id du benevole avec la fonction
         $bene = new ModelBenevole();
-        $test = $this->bene->getIDbyLogin('testMethodGetIdByLog');
+        $test = $bene->getIDbyLogin('testMethodGetIdByLog');
         
         Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodGetIdByLog'");
         
-        $this->assertEquals($id, $test);
+        self::assertEquals($id, $test);
     }
 
     /**
@@ -444,21 +443,21 @@ class ModelBenevoleTest extends TestCase{
         
         //on verifie que le benevole n'est pas organisateur avec la fonction
         $bene = new ModelBenevole();
-        $unisOrga = $this->bene->isOrga($idBene, $idFest);
+        $unisOrga = $bene->isOrga($idBene, $idFest);
         
         //on lui donne le rang d'organisateur
-        $this->bene->promote($idBene, $idFest);
+        $bene->promote($idBene, $idFest);
         
         //on verifie que le benevole n'est pas organisateur avec la fonction
-        $isOrga = $this->bene->isOrga($idBene, $idFest);
+        $isOrga = $bene->isOrga($idBene, $idFest);
         
         //on supprime les ojbets crees
         Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodIsOrga'");
         Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodIsOrga'"); 
         Model::$pdo->query("DELETE FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
         
-        $this->assertFalse($unisOrga);
-        $this->assertTrue($isOrga);
+        self::assertFalse($unisOrga);
+        self::assertTrue($isOrga);
     }
 
     /**
@@ -481,21 +480,21 @@ class ModelBenevoleTest extends TestCase{
         
         //on verifie que le benevole n'est pas valide avec la fonction
         $bene = new ModelBenevole();
-        $unisValide = $this->bene->isValide($idBene, $idFest);
+        $unisValide = $bene->isValide($idBene, $idFest);
         
         //on l'accepte
-        $this->bene->accept($idBene, $idFest);
+        $bene->accept($idBene, $idFest);
         
         //on verifie que le benevole est bien valide avec la fonction
-        $isValide = $this->bene->isValide($idBene, $idFest);
+        $isValide = $bene->isValide($idBene, $idFest);
        
         //on supprime les ojbets crees
         Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodIsValide'");
         Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodIsValide'");
         Model::$pdo->query("DELETE FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
         
-        $this->assertFalse($unisValide);
-        $this->assertTrue($isValide);
+        self::assertFalse($unisValide);
+        self::assertTrue($isValide);
     }
 
     /**
@@ -513,16 +512,16 @@ class ModelBenevoleTest extends TestCase{
         
         //on reinitialise le nonce avec la fonction
         $bene = new ModelBenevole();
-        $this->bene->nonce($idBene);
+        $bene->nonce($idBene);
         
         //on recupere la valeur de l'attribut nonce
-        $test =  Model::$pdo->query("SELECT nonce FROM Benevole WHERE login = 'testMethodNonce'");
+        $test = Model::$pdo->query("SELECT nonce FROM Benevole WHERE login = 'testMethodNonce'");
         
         //on sumpprime les objets crees
         Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodNonce'");
         
         //on verifie qu'il est "NULL"
-        $this->assertNull($test);
+        self::assertNull($test);
     }
 
     /**
@@ -545,13 +544,13 @@ class ModelBenevoleTest extends TestCase{
         
         //on verifie qu'il est bien participant
         $bene = new ModelBenevole();
-        $isPart = $this->bene->isParticipant($idBene, $idFest);
+        $isPart = $bene->isParticipant($idBene, $idFest);
         
         //on le supprime du festival avec la fonction
-        $this->bene->kick($idBene, $idFest);
+        $bene->kick($idBene, $idFest);
         
         //on verifie qu'il n'est plus participant
-        $unisPart = $this->bene->isParticipant($idBene, $idFest);
+        $unisPart = $bene->isParticipant($idBene, $idFest);
         
         //on supprime les objets crees
         Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodKick'");
@@ -559,8 +558,8 @@ class ModelBenevoleTest extends TestCase{
         Model::$pdo->query("DELETE FROM link_BenevoleParticipeFestival WHERE IDFestival = ". $idFest ." AND IDBenevole = ". $idBene .";");
         
         
-        $this->assertTrue($isPart);
-        $this->assertFalse($unisPart);
+        self::assertTrue($isPart);
+        self::assertFalse($unisPart);
     }
 
     /**
@@ -577,13 +576,13 @@ class ModelBenevoleTest extends TestCase{
         $idBene = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodGetLastSav'");
         
         $bene = new ModelBenevole();
-        $test = $this->bene->getLastSaved();
+        $test = $bene->getLastSaved();
                 
         //on supprime les objets crees
         Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodGetLastSav'");
         
         //on verifie que les id sont bien identiques
-        $this->assertEquals($idBene, $test);
+        self::assertEquals($idBene, $test);
     }
 
     /**
