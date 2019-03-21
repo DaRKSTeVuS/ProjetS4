@@ -17,10 +17,10 @@ class ModelPostesTest extends TestCase
     {
 
         // on cree un poste
-        $this->modelPoste = new ModelPoste(456, "testMethod__get");
+        $modelPoste = new ModelPoste(456, "testMethod__get");
 
         // on recupere la valeur du nom
-        $nom = $this->modelPoste->__get("nomPoste");
+        $nom = $modelPoste->__get("nomPoste");
 
         // on verifie qu'elle est bien egale a celle donnee
         self::assertEquals("testMethod__get", $nom);
@@ -38,13 +38,13 @@ class ModelPostesTest extends TestCase
         );
 
         // on cree un poste
-        $this->modelPoste = new ModelPoste($data);
+        $modelPoste = new ModelPoste($data);
 
         // on modifie la valeur du nom du poste
-        $this->modelPoste->__set("nomPoste", "testMethod__set2");
+        $modelPoste->__set("nomPoste", "testMethod__set2");
 
         // on recupere la valeur du nom du poste
-        $nom = $this->modelPoste->__get("nomPoste");
+        $nom = $modelPoste->__get("nomPoste");
 
         // on verifie qu'elle est bien egale a la nouvelle valeur
         self::assertEquals("testMethod__set2", $nom);

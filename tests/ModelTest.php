@@ -14,17 +14,6 @@ class ModelTest extends TestCase {
     
     private $model;
 
-    /*
-    protected function setUp() {
-        parent::setUp();
-        $this->model = new Model();
-    }
-
-    protected function tearDown() {
-        $this->model = null;
-        parent::tearDown();
-    }*/
-
     /**
      * Tests Model::select()
      */
