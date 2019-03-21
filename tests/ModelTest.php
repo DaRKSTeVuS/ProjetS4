@@ -173,14 +173,14 @@ class ModelTest extends TestCase
 
         // on cr�e un tableau de nouvelles valeurs
         $values = array(
-            "IDBenevole" => null,
-            "login" => "testMethodUpdateToDate",
-            "password" => "testMethodUpdateToDate",
-            "nom" => "testMethodUpdateToDate",
-            "prenom" => "testMethodUpdateToDate",
-            "dateNaiss" => "testMethodUpdateToDate",
-            "email" => "testMethodUpdateToDate",
-            "numTelephone" => "testMethodUpdateToDate",
+            // "IDBenevole" => null,
+            "login" => "testMethodUpdateToDa",
+            "password" => "testMethodUpdateToDa",
+            "nom" => "testMethodUpdateToDa",
+            "prenom" => "testMethodUpdateToDa",
+            "dateNaiss" => "testMethodUpdateToDa",
+            "email" => "testMethodUpdateToDa",
+            "numTelephone" => "testMethodUpdateToDa",
             "nonce" => Security::generateRandomHex()
         );
 
@@ -195,12 +195,12 @@ class ModelTest extends TestCase
        self::assertEmpty($log);
 
         // on s�lectionne les donn�es ayant les nouvelles valeurs
-        $rep = Model::$pdo->query("SELECT login FROM Benevole WHERE login = 'testMethodUpdateToDate';");
+        $rep = Model::$pdo->query("SELECT login FROM Benevole WHERE login = 'testMethodUpdateToDa';");
         $log = $rep->fetchAll(PDO::FETCH_OBJ);
         $log = $log[0]->login;
                 
         // on v�rifie que les donn�es avec les nouvelles valeurs existent dans la base de donn�es
-        self::assertEquals($log, "testMethodUpdateToDate");
+        self::assertEquals($log, "testMethodUpdateToDa");
         
         } catch (PDOException $e) {
             // On affiche le message d'erreur
@@ -210,7 +210,7 @@ class ModelTest extends TestCase
         } finally {
         // on supprime le b�n�vole cr�� pour le test
         Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodUpdate';");
-        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodUpdateToDate';");
+        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodUpdateToDa';");
         }
     }
 }
