@@ -100,13 +100,9 @@ class ModelBenevoleTest extends TestCase
         $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
         $tab = $rep->fetchAll();
 
-        // on v�rifie que les deux tableaux de r�ponses ont la m�me taille
-        self::assertEquals(sizeof($tab), sizeof($allOrga));
+        // On vérifie que les deux tableaux soient les mêmes
+        self::assertEquals($tab, $allOrga);
 
-        // on v�rifie que tous les �l�ments des deux tableaux sont les m�mes
-        for ($i = 0; $i < sizeof($allOrga); $i ++) {
-            self::assertEquals($allOrga[$i], $tab[$i]);
-        }
     }
 
     /**
@@ -115,21 +111,15 @@ class ModelBenevoleTest extends TestCase
     public function testReadAllBene()
     {
         // on r�cup�re tous les b�n�voles d'un festival avec la fonction
-        $bene = new ModelBenevole();
-        $allBene = $bene->readAllBene(2);
+        $allBene = ModelBenevole::readAllBene(2);
 
         // on r�cup�re tous les b�n�voles d'un festival "� la main"
-        $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 2 AND l.valide = 1;");
+        $rep = Model::$pdo->query("SELECT b.IDBenevole, b.login, b.password, b.nom, b.prenom, b.dateNaiss, b.email, b.numTelephone, b.nonce FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 2 AND l.valide = 1;");
         $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
         $tab = $rep->fetchAll();
-
-        // on v�rifie que les deux tableaux de r�ponses ont la m�me taille
-        self::assertEquals(sizeOf($tab), sizeOf($allBene));
-
-        // on v�rifie que tous les �l�ments des deux tableaux sont les m�mes
-        for ($i = 0; $i < sizeof($allBene); $i ++) {
-            self::assertEquals($allBene[$i], $tab[$i]);
-        }
+       
+        // On vérifie que les deux tableaux soient les mêmes
+        self::assertEquals($tab, $allBene);
     }
 
     /**
@@ -138,21 +128,15 @@ class ModelBenevoleTest extends TestCase
     public function testReadAllDemandes()
     {
         // on r�cup�re toutes les demandes de b�n�volat avec la fonction
-        $bene = new ModelBenevole();
-        $allDemandes = $bene->readAllDemandes(1);
+        $allDemandes = ModelBenevole::readAllDemandes(1);
 
         // on r�cup�re toutes les demandes de b�n�volat "� la main"
-        $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.valide = 0;");
+        $rep = Model::$pdo->query("SELECT b.IDBenevole, b.login, b.password, b.nom, b.prenom, b.dateNaiss, b.email, b.numTelephone, b.nonce FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.valide = 0;");
         $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
         $tab = $rep->fetchAll();
-
-        // on v�rifie que les deux tableaux de r�ponses ont la m�me taille
-        self::assertEquals(sizeOf($tab), sizeOf($allDemandes));
-
-        // on v�rifie que tous les �l�ments des deux tableaux sont les m�mes
-        for ($i = 0; $i < sizeof($allDemandes); $i ++) {
-            self::assertEquals($allDemandes[$i], $tab[$i]);
-        }
+        
+        // On vérifie que les deux tableaux soient les mêmes
+        self::assertEquals($tab, $allDemandes);
     }
 
     /**
@@ -161,8 +145,7 @@ class ModelBenevoleTest extends TestCase
     public function testIsPref()
     {
         // on r�cup�re la valeur d'une pr�f�rence d'un b�n�vole pour un poste avec la fonction
-        $bene = new ModelBenevole();
-        $pref = $bene->isPref(1, 46);
+        $pref = ModelBenevole::isPref(1, 46);
 
         // on r�cup�re la valeur d'une pr�f�rence d'un b�n�vole pour un poste "� la main"
         $rep = Model::$pdo->query("SELECT * FROM link_PreferenceBenevolePostes WHERE IDBenevole = 1 AND IDPoste = 46;");
@@ -209,8 +192,7 @@ class ModelBenevoleTest extends TestCase
         try {
 
             // on v�rifie si un mot de passe est correct avec la fonction
-            $bene = new ModelBenevole();
-            $test = $bene->checkPassword("testMethodCheck", "testMethodCheck");
+            $test = ModelBenevole::checkPassword("testMethodCheck", "testMethodCheck");
 
             // on v�rifie que le mot de passe n'est pas correct
             self::assertFalse($test);
@@ -221,7 +203,7 @@ class ModelBenevoleTest extends TestCase
             Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodCheck', 'testMethodCheck', 'testMethodCheck', 'testMethodCheck', '01/06/1999', 'testMethodCheck', 'testMethodCheck', '" . $nonce . "');");
 
             // on v�rifie si un mot de passe est correct avec la fonction
-            $test2 = $bene->checkPassword("testMethodCheck", "testMethodCheck");
+            $test2 = ModelBenevole::checkPassword("testMethodCheck", "testMethodCheck");
 
             // on v�rifie que le mot de passe est correct
             self::assertTrue($test2);
