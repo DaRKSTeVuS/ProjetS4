@@ -1,5 +1,6 @@
 <?php
 use PHPUnit\Framework\TestCase;
+
 include '../src/lib/File.php';
 include '../src/lib/Security.php';
 include '../src/model/ModelBenevole.php';
@@ -9,8 +10,12 @@ include '../src/model/ModelFestival.php';
 /**
  * ModelBenevole test case.
  */
+<<<<<<< HEAD
 class ModelBenevoleTest extends TestCase
 {
+=======
+class ModelBenevoleTest extends TestCase {
+>>>>>>> b61514a8dbe5b169f4762968f95882f4eb98219e
 
     /**
      *

@@ -1,6 +1,7 @@
 <?php
-require_once '../src/config/Conf.php';
 use PHPUnit\Framework\TestCase;
+
+include '../src/config/Conf.php';
 
 class ConfTest extends TestCase {
 	public function testDatabaseTableAttributes() {
