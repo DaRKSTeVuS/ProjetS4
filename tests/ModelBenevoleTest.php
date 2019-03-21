@@ -115,21 +115,15 @@ class ModelBenevoleTest extends TestCase
     public function testReadAllBene()
     {
         // on r�cup�re tous les b�n�voles d'un festival avec la fonction
-        $bene = new ModelBenevole();
-        $allBene = $bene->readAllBene(2);
+        $allBene = ModelBenevole::readAllBene(2);
 
         // on r�cup�re tous les b�n�voles d'un festival "� la main"
-        $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 2 AND l.valide = 1;");
+        $rep = Model::$pdo->query("SELECT b.IDBenevole, b.login, b.password, b.nom, b.prenom, b.dateNaiss, b.email, b.numTelephone, b.nonce FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 2 AND l.valide = 1;");
         $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
         $tab = $rep->fetchAll();
-
-        // on v�rifie que les deux tableaux de r�ponses ont la m�me taille
-        self::assertEquals(sizeOf($tab), sizeOf($allBene));
-
-        // on v�rifie que tous les �l�ments des deux tableaux sont les m�mes
-        for ($i = 0; $i < sizeof($allBene); $i ++) {
-            self::assertEquals($allBene[$i], $tab[$i]);
-        }
+        
+        // On vérifie que les deux tableaux sont les mêmes
+        self::assertEquals($tab, $allBene);
     }
 
     /**
@@ -138,14 +132,13 @@ class ModelBenevoleTest extends TestCase
     public function testReadAllDemandes()
     {
         // on r�cup�re toutes les demandes de b�n�volat avec la fonction
-        $bene = new ModelBenevole();
-        $allDemandes = $bene->readAllDemandes(1);
+        $allDemandes = ModelBenevole::readAllDemandes(1);
 
         // on r�cup�re toutes les demandes de b�n�volat "� la main"
         $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.valide = 0;");
         $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
         $tab = $rep->fetchAll();
-
+        
         // on v�rifie que les deux tableaux de r�ponses ont la m�me taille
         self::assertEquals(sizeOf($tab), sizeOf($allDemandes));
 
