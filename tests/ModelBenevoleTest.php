@@ -1,5 +1,8 @@
 <?php
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Util\Type;
+use phpDocumentor\Reflection\Types\Integer;
+use phpDocumentor\Reflection\Types\String_;
 
 include '../src/lib/File.php';
 include '../src/lib/Security.php';
@@ -817,17 +820,6 @@ class ModelBenevoleTest extends TestCase
     }
 
     /**
-     * Tests ModelBenevole::planning()
-     */
-    public function testPlanning()
-    {
-        // TODO Auto-generated ModelBenevoleTest::testPlanning()
-        $this->markTestIncomplete("planning test not implemented");
-
-        ModelBenevole::planning( /* parameters */);
-    }
-
-    /**
      * Tests ModelBenevole::ajouterPref()
      */
     public function testAjouterPref()
@@ -939,4 +931,22 @@ class ModelBenevoleTest extends TestCase
         
         self::assertEquals($tab, $postesPref);
     }
+    
+    public function testNumTel(){
+        $req = Model::$pdo->query("SELECT numTelephone FROM Benevole WHERE IDBenevole = 43");
+        $num = $req->fetchAll(PDO::FETCH_OBJ);
+        $num = $num[0]->numTelephone;
+        
+        self::assertFalse(gettype($num)==Integer::class);
+        self::assertTrue(sizeof($num)!=10);
+       
+    }
+    
+    public function testDoubleMail(){
+        $req = Model::$pdo->query("SELECT email FROM Benevole WHERE email = 'thomas@yopmail.com'");
+        $num = $req->fetchAll(PDO::FETCH_OBJ);
+        
+        self::assertTrue(sizeof($num)>1);
+    }
+    
 }
