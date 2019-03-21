@@ -707,8 +707,9 @@ class ModelBenevoleTest extends TestCase
 
             // on recupere les id des deux objets crees
             $req = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodGetLastSav'");
-            $idBene = $req->fetchAll(PDO::FETCH_OBJ);
-            $idBene = $idBene[0]->IDBenevole;
+            $req->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
+            $idBene = $req->fetchAll();
+            $idBene = $idBene[0];
 
             $test = ModelBenevole::getLastSaved();
 
