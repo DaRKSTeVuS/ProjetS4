@@ -122,35 +122,34 @@ class ModelTest extends TestCase
     public function testDelete()
     {
         try {
-        // on cr�e des variables pour les donn�es "sp�ciales"
-        $nonce = Security::generateRandomHex();
+            // on cr�e des variables pour les donn�es "sp�ciales"
+            $nonce = Security::generateRandomHex();
 
-        // on ins�re les donn�es que l'on va supprimer
-        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodDelete', 'testMethodDelete', 'testMethodDelete', 'testMethodDelete', '01/06/1999', 'testMethodDelete', 'testMethodDelete', '" . $nonce . "');");
+            // on ins�re les donn�es que l'on va supprimer
+            Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodDelete', 'testMethodDelete', 'testMethodDelete', 'testMethodDelete', '01/06/1999', 'testMethodDelete', 'testMethodDelete', '" . $nonce . "');");
 
-        // on s�lectionne l'id correspondant aux donn�es que l'on va supprimer
-        $rep = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodDelete';");
-        $id = $rep->fetchAll(PDO::FETCH_OBJ);
-        $id = $id[0]->IDBenevole;
+            // on s�lectionne l'id correspondant aux donn�es que l'on va supprimer
+            $rep = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodDelete';");
+            $id = $rep->fetchAll(PDO::FETCH_OBJ);
+            $id = $id[0]->IDBenevole;
 
-        // on supprime les donn�es ins�r�es
-        ModelBenevole::delete($id);
+            // on supprime les donn�es ins�r�es
+            ModelBenevole::delete($id);
 
-        // on s�lectionne les donn�es que l'on a supprim�
-        $rep2 = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodDelete';");
-        $id2 = $rep2->fetchAll(PDO::FETCH_OBJ);
-        
-        // on v�rifie que les donn�es ne sont plus dans la base de donn�es
-        self::assertEmpty($id2);
-        
+            // on s�lectionne les donn�es que l'on a supprim�
+            $rep2 = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodDelete';");
+            $id2 = $rep2->fetchAll(PDO::FETCH_OBJ);
+
+            // on v�rifie que les donn�es ne sont plus dans la base de donn�es
+            self::assertEmpty($id2);
         } catch (PDOException $e) {
             // On affiche le message d'erreur
             echo $e->getMessage();
             // On force un fail parce qu'il y a une une erreur
             self::fail("Il ne devrait pas y avoir d'erreur");
         } finally {
-        // on supprime le b�n�vole cr�� pour le test (si celui-ci n'a pas �t� supprim� par la fonction)
-        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodDelete';");
+            // on supprime le b�n�vole cr�� pour le test (si celui-ci n'a pas �t� supprim� par la fonction)
+            Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodDelete';");
         }
     }
 
@@ -160,57 +159,56 @@ class ModelTest extends TestCase
     public function testUpdate()
     {
         try {
-        // on cr�e des variables pour les donn�es "sp�ciales"
-        $nonce = Security::generateRandomHex();
+            // on cr�e des variables pour les donn�es "sp�ciales"
+            $nonce = Security::generateRandomHex();
 
-        // on ins�re les donn�es que l'on va modifier
-        Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodUpdate', 'testMethodUpdate', 'testMethodUpdate', 'testMethodUpdate', '03/02/2019', 'testMethodUpdate', 'testMethodUpdate', '" . $nonce . "');");
+            // on ins�re les donn�es que l'on va modifier
+            Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodUpdate', 'testMethodUpdate', 'testMethodUpdate', 'testMethodUpdate', '03/02/2019', 'testMethodUpdate', 'testMethodUpdate', '" . $nonce . "');");
 
-        // on s�lectionne l'id correspondant aux donn�es que l'on va modifier
-        $rep = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodUpdate';");
-        $id = $rep->fetchAll(PDO::FETCH_OBJ);
-        $id = $id[0]->IDBenevole;
+            // on s�lectionne l'id correspondant aux donn�es que l'on va modifier
+            $rep = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodUpdate';");
+            $id = $rep->fetchAll(PDO::FETCH_OBJ);
+            $id = $id[0]->IDBenevole;
 
-        // on cr�e un tableau de nouvelles valeurs
-        $values = array(
-            // "IDBenevole" => null,
-            "login" => "testMethodUpdateToDa",
-            "password" => "testMethodUpdateToDa",
-            "nom" => "testMethodUpdateToDa",
-            "prenom" => "testMethodUpdateToDa",
-            "dateNaiss" => "testMethodUpdateToDa",
-            "email" => "testMethodUpdateToDa",
-            "numTelephone" => "testMethodUpdateToDa",
-            "nonce" => Security::generateRandomHex()
-        );
+            // on cr�e un tableau de nouvelles valeurs
+            $values = array(
+                // "IDBenevole" => null,
+                "login" => "testMethodUpdateToDa",
+                "password" => "testMethodUpdateToDa",
+                "nom" => "testMethodUpdateToDa",
+                "prenom" => "testMethodUpdateToDa",
+                "dateNaiss" => "testMethodUpdateToDa",
+                "email" => "testMethodUpdateToDa",
+                "numTelephone" => "testMethodUpdateToDa",
+                "nonce" => Security::generateRandomHex()
+            );
 
-        // on met � jour les donn�es avec la m�thode
-        ModelBenevole::update($id, $values);
+            // on met � jour les donn�es avec la m�thode
+            ModelBenevole::update($id, $values);
 
-        // on s�lectionne les donn�es ayant les anciennes valeurs
-        $rep = Model::$pdo->query("SELECT login FROM Benevole WHERE login = 'testMethodUpdate';");
-        $log = $rep->fetchAll(PDO::FETCH_OBJ);
+            // on s�lectionne les donn�es ayant les anciennes valeurs
+            $rep = Model::$pdo->query("SELECT login FROM Benevole WHERE login = 'testMethodUpdate';");
+            $log = $rep->fetchAll(PDO::FETCH_OBJ);
 
-        // on v�rifie que les donn�es avec les anciennes valeurs n'existent plus dans la base de donn�es
-       self::assertEmpty($log);
+            // on v�rifie que les donn�es avec les anciennes valeurs n'existent plus dans la base de donn�es
+            self::assertEmpty($log);
 
-        // on s�lectionne les donn�es ayant les nouvelles valeurs
-        $rep = Model::$pdo->query("SELECT login FROM Benevole WHERE login = 'testMethodUpdateToDa';");
-        $log = $rep->fetchAll(PDO::FETCH_OBJ);
-        $log = $log[0]->login;
-                
-        // on v�rifie que les donn�es avec les nouvelles valeurs existent dans la base de donn�es
-        self::assertEquals($log, "testMethodUpdateToDa");
-        
+            // on s�lectionne les donn�es ayant les nouvelles valeurs
+            $rep = Model::$pdo->query("SELECT login FROM Benevole WHERE login = 'testMethodUpdateToDa';");
+            $log = $rep->fetchAll(PDO::FETCH_OBJ);
+            $log = $log[0]->login;
+
+            // on v�rifie que les donn�es avec les nouvelles valeurs existent dans la base de donn�es
+            self::assertEquals($log, "testMethodUpdateToDa");
         } catch (PDOException $e) {
             // On affiche le message d'erreur
             echo $e->getMessage();
             // On force un fail parce qu'il y a une une erreur
             self::fail("Il ne devrait pas y avoir d'erreur");
         } finally {
-        // on supprime le b�n�vole cr�� pour le test
-        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodUpdate';");
-        Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodUpdateToDa';");
+            // on supprime le b�n�vole cr�� pour le test
+            Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodUpdate';");
+            Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodUpdateToDa';");
         }
     }
 }
