@@ -66,9 +66,6 @@ class ModelPostesTest extends TestCase
         self::assertEquals(sizeOf($tab), sizeOf($allPoste));
 
         // on verifie que tous les elements des deux tableaux sont les memes
-        var_dump($allPoste);
-        var_dump($tab);
-
         for ($i = 0; $i < sizeof($allPoste); $i ++) {
             self::assertEquals($allPoste[$i], $tab[$i]);
         }
