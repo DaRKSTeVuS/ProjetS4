@@ -21,7 +21,7 @@ class ModelBenevoleTest extends TestCase
      * @var ModelBenevole
      */
     private $modelBenevole;
-    
+
     // Variable pour emuler des cookies de sessions
     public static $shared_session = array();
 
@@ -108,7 +108,6 @@ class ModelBenevoleTest extends TestCase
 
         // On vérifie que les deux tableaux soient les mêmes
         self::assertEquals($tab, $allOrga);
-
     }
 
     /**
@@ -123,7 +122,7 @@ class ModelBenevoleTest extends TestCase
         $rep = Model::$pdo->query("SELECT b.IDBenevole, b.login, b.password, b.nom, b.prenom, b.dateNaiss, b.email, b.numTelephone, b.nonce FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 2 AND l.valide = 1;");
         $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
         $tab = $rep->fetchAll();
-       
+
         // On vérifie que les deux tableaux soient les mêmes
         self::assertEquals($tab, $allBene);
     }
@@ -140,7 +139,7 @@ class ModelBenevoleTest extends TestCase
         $rep = Model::$pdo->query("SELECT b.IDBenevole, b.login, b.password, b.nom, b.prenom, b.dateNaiss, b.email, b.numTelephone, b.nonce FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 1 AND l.valide = 0;");
         $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
         $tab = $rep->fetchAll();
-        
+
         // On vérifie que les deux tableaux soient les mêmes
         self::assertEquals($tab, $allDemandes);
     }
@@ -433,7 +432,7 @@ class ModelBenevoleTest extends TestCase
         try {
             // On initialise le cookie de session
             $_SESSION = ModelBenevoleTest::$shared_session;
-            
+
             // on cree des variables pour les donnees "speciales"
             $nonce = Security::generateRandomHex();
 
@@ -737,29 +736,28 @@ class ModelBenevoleTest extends TestCase
         try {
             // on cree des variables pour les donnees "speciales"
             $nonce = Security::generateRandomHex();
-            
+
             // on ajoute un benevole
             Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodAffecter', 'testMethodAffecter', 'testMethodAffecter', 'testMethodAffecter', '01/06/1999', 'testMethodAffecter', 'testMethodAffecter', '" . $nonce . "');");
-            
+
             // on recupere les id des deux objets crees
             $req = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodAffecter'");
             $idBene = $req->fetchAll(PDO::FETCH_OBJ);
             $idBene = $idBene[0]->IDBenevole;
-            
-            $req = Model::$pdo->query("SELECT * FROM link_AffecterCreneauBenevole WHERE idCreneaux = 22 AND idBenevole = ". $idBene ."");
+
+            $req = Model::$pdo->query("SELECT * FROM link_AffecterCreneauBenevole WHERE idCreneaux = 22 AND idBenevole = " . $idBene . "");
             $req->setFetchMode(PDO::FETCH_OBJ);
             $tab = $req->fetchAll();
-            
+
             self::assertEmpty($tab);
-            
+
             ModelBenevole::affecterBenevole($idBene, 22);
-            
-            $req = Model::$pdo->query("SELECT * FROM link_AffecterCreneauBenevole WHERE idCreneaux = 22 AND idBenevole = ". $idBene ."");
+
+            $req = Model::$pdo->query("SELECT * FROM link_AffecterCreneauBenevole WHERE idCreneaux = 22 AND idBenevole = " . $idBene . "");
             $req->setFetchMode(PDO::FETCH_OBJ);
             $tab = $req->fetchAll();
-            
+
             self::assertNotEmpty($tab);
-            
         } catch (PDOException $e) {
             // On affiche le message d'erreur
             echo $e->getMessage();
@@ -779,35 +777,34 @@ class ModelBenevoleTest extends TestCase
         try {
             // on cree des variables pour les donnees "speciales"
             $nonce = Security::generateRandomHex();
-            
+
             // on ajoute un benevole
             Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodSuppr', 'testMethodSuppr', 'testMethodSuppr', 'testMethodSuppr', '01/06/1999', 'testMethodSuppr', 'testMethodSuppr', '" . $nonce . "');");
-            
+
             // on recupere les id des deux objets crees
             $req = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodSuppr'");
             $idBene = $req->fetchAll(PDO::FETCH_OBJ);
             $idBene = $idBene[0]->IDBenevole;
-                  
-            //on affecte le benevole au creneau
+
+            // on affecte le benevole au creneau
             ModelBenevole::affecterBenevole($idBene, 22);
-            
-            //on verifie que l'affectation a bien eu lieu
-            $req = Model::$pdo->query("SELECT * FROM link_AffecterCreneauBenevole WHERE idCreneaux = 22 AND idBenevole = ". $idBene ."");
+
+            // on verifie que l'affectation a bien eu lieu
+            $req = Model::$pdo->query("SELECT * FROM link_AffecterCreneauBenevole WHERE idCreneaux = 22 AND idBenevole = " . $idBene . "");
             $req->setFetchMode(PDO::FETCH_OBJ);
             $tab = $req->fetchAll();
-            
+
             self::assertNotEmpty($tab);
-            
-            //on supprime le benevole du creneau
+
+            // on supprime le benevole du creneau
             ModelBenevole::supprimerBenevoleCreneau($idBene, 22);
-            
-            //on veririfie que l'affectation n'existe plus
-            $req = Model::$pdo->query("SELECT * FROM link_AffecterCreneauBenevole WHERE idCreneaux = 22 AND idBenevole = ". $idBene ."");
+
+            // on veririfie que l'affectation n'existe plus
+            $req = Model::$pdo->query("SELECT * FROM link_AffecterCreneauBenevole WHERE idCreneaux = 22 AND idBenevole = " . $idBene . "");
             $req->setFetchMode(PDO::FETCH_OBJ);
             $tab = $req->fetchAll();
-            
+
             self::assertEmpty($tab);
-            
         } catch (PDOException $e) {
             // On affiche le message d'erreur
             echo $e->getMessage();
@@ -827,31 +824,30 @@ class ModelBenevoleTest extends TestCase
         try {
             // on cree des variables pour les donnees "speciales"
             $nonce = Security::generateRandomHex();
-            
+
             // on ajoute un benevole
             Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodAjoutPref', 'testMethodAjoutPref', 'testMethodAjoutPref', 'testMethodAjoutPref', '01/06/1999', 'testMethodAjoutPref', 'testMethodAjoutPref', '" . $nonce . "');");
-            
+
             // on recupere les id des deux objets crees
             $req = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodAjoutPref'");
             $idBene = $req->fetchAll(PDO::FETCH_OBJ);
             $idBene = $idBene[0]->IDBenevole;
-            
-            //on verifie que l'affectation a bien eu lieu
-            $req = Model::$pdo->query("SELECT * FROM link_PreferenceBenevolePostes WHERE IDPoste = 46 AND idBenevole = ". $idBene ."");
+
+            // on verifie que l'affectation a bien eu lieu
+            $req = Model::$pdo->query("SELECT * FROM link_PreferenceBenevolePostes WHERE IDPoste = 46 AND idBenevole = " . $idBene . "");
             $req->setFetchMode(PDO::FETCH_CLASS, 'ModelDisponibilites');
             $tab = $req->fetchAll();
-            
+
             self::assertEmpty($tab);
-            
+
             ModelBenevole::ajouterPref($idBene, 46);
-            
-            //on verifie que l'affectation a bien eu lieu
-            $req = Model::$pdo->query("SELECT * FROM link_PreferenceBenevolePostes WHERE IDPoste = 46 AND idBenevole = ". $idBene ."");
+
+            // on verifie que l'affectation a bien eu lieu
+            $req = Model::$pdo->query("SELECT * FROM link_PreferenceBenevolePostes WHERE IDPoste = 46 AND idBenevole = " . $idBene . "");
             $req->setFetchMode(PDO::FETCH_CLASS, 'ModelDisponibilites');
             $tab = $req->fetchAll();
-            
+
             self::assertNotEmpty($tab);
-            
         } catch (PDOException $e) {
             // On affiche le message d'erreur
             echo $e->getMessage();
@@ -871,34 +867,33 @@ class ModelBenevoleTest extends TestCase
         try {
             // on cree des variables pour les donnees "speciales"
             $nonce = Security::generateRandomHex();
-            
+
             // on ajoute un benevole
             Model::$pdo->query("INSERT INTO Benevole(login, password, nom, prenom, dateNaiss, email, numTelephone, nonce) VALUES ('testMethodRetirer', 'testMethodRetirer', 'testMethodRetirer', 'testMethodRetirer', '01/06/1999', 'testMethodRetirer', 'testMethodRetirer', '" . $nonce . "');");
-            
+
             // on recupere les id des deux objets crees
             $req = Model::$pdo->query("SELECT IDBenevole FROM Benevole WHERE login = 'testMethodRetirer'");
             $idBene = $req->fetchAll(PDO::FETCH_OBJ);
             $idBene = $idBene[0]->IDBenevole;
-                   
-            //on ajoute une preference au benevole
+
+            // on ajoute une preference au benevole
             ModelBenevole::ajouterPref($idBene, 46);
-            
-            //on verifie que l'affectation a bien eu lieu
-            $req = Model::$pdo->query("SELECT * FROM link_PreferenceBenevolePostes WHERE IDPoste = 46 AND idBenevole = ". $idBene ."");
+
+            // on verifie que l'affectation a bien eu lieu
+            $req = Model::$pdo->query("SELECT * FROM link_PreferenceBenevolePostes WHERE IDPoste = 46 AND idBenevole = " . $idBene . "");
             $req->setFetchMode(PDO::FETCH_CLASS, 'ModelDisponibilites');
             $tab = $req->fetchAll();
-            
+
             self::assertNotEmpty($tab);
-            
+
             ModelBenevole::retirerPref($idBene, 46);
-            
-            //on verifie que l'affectation a bien ete retiree
-            $req = Model::$pdo->query("SELECT * FROM link_PreferenceBenevolePostes WHERE IDPoste = 46 AND idBenevole = ". $idBene ."");
+
+            // on verifie que l'affectation a bien ete retiree
+            $req = Model::$pdo->query("SELECT * FROM link_PreferenceBenevolePostes WHERE IDPoste = 46 AND idBenevole = " . $idBene . "");
             $req->setFetchMode(PDO::FETCH_CLASS, 'ModelDisponibilites');
             $tab = $req->fetchAll();
-            
+
             self::assertEmpty($tab);
-            
         } catch (PDOException $e) {
             // On affiche le message d'erreur
             echo $e->getMessage();
@@ -916,19 +911,19 @@ class ModelBenevoleTest extends TestCase
     public function testReadPostesPref()
     {
         $postesPref = ModelBenevole::readPostesPref(1);
-        
+
         $rep = Model::$pdo->query("SELECT p.IDPoste, p.nomPoste
 				FROM link_PreferenceBenevolePostes lpbp
 				JOIN Poste p ON lpbp.IDPoste = p.IDPoste
 				WHERE lpbp.IDBenevole = 1");
-        
+
         $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelPoste');
         $tab = $rep->fetchAll();
-        
-        if(empty($tab)){
+
+        if (empty($tab)) {
             $tab = false;
         }
-        
+
         self::assertEquals($tab, $postesPref);
     }
     
