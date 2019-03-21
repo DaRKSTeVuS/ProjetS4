@@ -18,6 +18,9 @@ class ModelBenevoleTest extends TestCase
      * @var ModelBenevole
      */
     private $modelBenevole;
+    
+    // Variable pour emuler des cookies de sessions
+    public static $shared_session = array();
 
     /**
      * Tests ModelBenevole->__get()
@@ -172,17 +175,12 @@ class ModelBenevoleTest extends TestCase
         $allDemandesOrga = $bene->readAllDemandesOrga(63);
 
         // on r�cup�re toutes les demandes d'organisation de b�n�voles "� la main"
-        $rep = Model::$pdo->query("SELECT * FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 63 AND l.candidat = 1;");
+        $rep = Model::$pdo->query("SELECT b.IDBenevole, b.login, b.password, b.nom, b.prenom, b.dateNaiss, b. email, b.numTelephone, b.nonce FROM Benevole b JOIN link_BenevoleParticipeFestival l ON b.IDBenevole = l.IDBenevole WHERE l.IDFestival = 63 AND l.candidat = 1;");
         $rep->setFetchMode(PDO::FETCH_CLASS, 'ModelBenevole');
         $tab = $rep->fetchAll();
 
-        // on v�rifie que les deux tableaux de r�ponses ont la m�me taille
-        self::assertEquals(sizeOf($tab), sizeOf($allDemandesOrga));
-
-        // on v�rifie que tous les �l�ments des deux tableaux sont les m�mes
-        for ($i = 0; $i < sizeof($allDemandesOrga); $i ++) {
-            self::assertEquals($allDemandesOrga[$i], $tab[$i]);
-        }
+        // On vérifie que les deux tableaux soient les mêmes
+        self::assertEquals($tab, $allDemandesOrga);
     }
 
     /**
@@ -432,6 +430,9 @@ class ModelBenevoleTest extends TestCase
     public function testIsParticipant()
     {
         try {
+            // On initialise le cookie de session
+            $_SESSION = ModelBenevoleTest::$shared_session;
+            
             // on cree des variables pour les donnees "speciales"
             $nonce = Security::generateRandomHex();
 
@@ -447,6 +448,8 @@ class ModelBenevoleTest extends TestCase
             $idFest = $req->fetchAll(PDO::FETCH_OBJ);
             $idFest = $idFest[0]->IDFestival;
 
+            // On affecte la valeur au cookie de sessions
+            $_SESSION['login'] = $idBene;
             // on verifie que le benevole n'est pas participant avec la fonction
             $unisParticipant = ModelBenevole::isParticipant($idBene, $idFest);
 
@@ -468,6 +471,7 @@ class ModelBenevoleTest extends TestCase
             Model::$pdo->query("DELETE FROM Benevole WHERE login = 'testMethodIsParticip'");
             Model::$pdo->query("DELETE FROM Festival WHERE nomFestival = 'testMethodIsParticip'");
             Model::$pdo->query("DELETE FROM link_BenevoleParticipeFestival WHERE IDFestival = " . $idFest . " AND IDBenevole = " . $idBene . ";");
+            ModelBenevoleTest::$shared_session = $_SESSION;
         }
     }
 
